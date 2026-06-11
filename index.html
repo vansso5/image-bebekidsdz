@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Bébé kids DZ | معرض الصور</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* ========== شريط علوي احترافي مع الصورة ========== */
+        .hero-header {
+            background: white;
+            padding: 16px 20px 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #1877f2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .store-badge {
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .store-badge i {
+            font-size: 0.7rem;
+        }
+
+        /* حاوية */
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* أزرار العائلات - تصميم أنيق */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 0 4px;
+            justify-content: center;
+        }
+        .filter-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            color: #475569;
+        }
+        .filter-btn i {
+            font-size: 0.85rem;
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
+            color: white;
+            box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+            transform: translateY(-1px);
+        }
+        .filter-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* شبكة الصور - 2 في الهاتف */
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .image-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+        .image-card:active {
+            transform: scale(0.98);
+        }
+        .image-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eef2ff;
+            background: #ffffff;
+        }
+        .seq-badge {
+            background: linear-gradient(135deg, #e7f3ff, #d4e6ff);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #1877f2;
+        }
+        .family-badge {
+            background: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* ========== ترقيم الصفحات - أزرار دائرية أنيقة في الأسفل فقط ========== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 40px 0 20px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            min-width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 14px;
+            background: white;
+            color: #1877f2;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-btn i {
+            font-size: 0.9rem;
+        }
+        .page-btn:hover:not(.disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
+            color: white;
+            box-shadow: 0 6px 14px rgba(24,119,242,0.3);
+        }
+        .page-btn:active {
+            transform: scale(0.94);
+        }
+        .page-btn.active {
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
+            color: white;
+            box-shadow: 0 4px 12px rgba(24,119,242,0.4);
+        }
+        .page-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .page-dots {
+            padding: 0 6px;
+            font-size: 1rem;
+            color: #94a3b8;
+            letter-spacing: 2px;
+        }
+
+        /* مودال تكبير الصورة */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .modal-content img {
+            width: auto;
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 20px;
+            display: block;
+            margin: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* رسائل */
+        .empty-msg {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            grid-column: 1/-1;
+            font-size: 0.95rem;
+            background: white;
+            border-radius: 24px;
+            margin: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #1877f2;
+            grid-column: 1/-1;
+            font-size: 1rem;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        /* للشاشات الأكبر */
+        @media (min-width: 600px) {
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+            .images-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
+            .images-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- شريط علوي احترافي مع الصورة -->
+<div class="hero-header">
+    <div class="top-bar">
+        <div class="logo-area">
+            <img class="logo-img" src="https://i.postimg.cc/hPVDdvy0/1000021497-removebg-preview.png" alt="Bébé kids DZ">
+            <span class="logo-text">Bébé kids DZ</span>
+        </div>
+        <div class="store-badge">
+            <i class="fas fa-crown"></i>
+            <span>معرض الصور</span>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- أزرار العائلات -->
+    <div id="filterBar" class="filter-bar">
+        <button class="filter-btn active" data-family="الكل"><i class="fas fa-star"></i> الكل</button>
+    </div>
+
+    <!-- شبكة الصور -->
+    <div id="imagesGrid" class="images-grid">
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> جاري التحميل...</div>
+    </div>
+
+    <!-- ترقيم الصفحات - يظهر دائماً في الأسفل -->
+    <div id="pagination" class="pagination"></div>
+</div>
+
+<footer>
+    <i class="fas fa-camera"></i> Bébé kids DZ &copy; 2026 – جميع الحقوق محفوظة
+</footer>
+
+<!-- مودال تكبير الصورة -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <img id="viewImage" src="" alt="صورة مكبرة">
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBWkToQTcMKSPlCOL_5t8v6QU5If4mYAbk",
+        authDomain: "kids-sky.firebaseapp.com",
+        databaseURL: "https://kids-sky-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kids-sky",
+        storageBucket: "kids-sky.firebasestorage.app",
+        messagingSenderId: "1087927781371",
+        appId: "1:1087927781371:web:6e8c11b3dd9f3db0de6d5e",
+        measurementId: "G-M1PX9F2LV7"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allImages = [];
+    let familiesList = [];
+    let currentFilter = "الكل";
+    let currentPage = 1;
+    const IMAGES_PER_PAGE = 20;
+
+    // عناصر DOM
+    const filterBar = document.getElementById('filterBar');
+    const imagesGrid = document.getElementById('imagesGrid');
+    const paginationDiv = document.getElementById('pagination');
+    const viewModal = document.getElementById('viewModal');
+    const viewImage = document.getElementById('viewImage');
+
+    // إغلاق المودال
+    viewModal.addEventListener('click', (e) => {
+        if (e.target === viewModal) {
+            viewModal.style.display = 'none';
+        }
+    });
+
+    // تحميل العائلات
+    function loadFamilies() {
+        db.ref('families').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            familiesList = Object.keys(data);
+            renderFilterButtons();
+        });
+    }
+
+    // أزرار الفلترة
+    function renderFilterButtons() {
+        let html = `<button class="filter-btn ${currentFilter === 'الكل' ? 'active' : ''}" data-family="الكل"><i class="fas fa-star"></i> الكل</button>`;
+        familiesList.forEach(family => {
+            html += `<button class="filter-btn ${currentFilter === family ? 'active' : ''}" data-family="${family}"><i class="fas fa-users"></i> ${family}</button>`;
+        });
+        filterBar.innerHTML = html;
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFilter = btn.getAttribute('data-family');
+                currentPage = 1;
+                renderFilterButtons();
+                displayImages();
+                renderPagination();
+            });
+        });
+    }
+
+    // تحميل الصور
+    function loadImages() {
+        db.ref('images').on('value', (snapshot) => {
+            const images = snapshot.val();
+            allImages = [];
+            if (images) {
+                allImages = Object.entries(images).map(([id, data]) => ({
+                    id: id,
+                    url: data.url,
+                    seqNum: data.seqNum,
+                    family: data.family,
+                    timestamp: data.timestamp || 0
+                }));
+                // ترتيب حسب الرقم التسلسلي
+                allImages.sort((a, b) => {
+                    const numA = parseInt(a.seqNum);
+                    const numB = parseInt(b.seqNum);
+                    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                    return String(a.seqNum).localeCompare(String(b.seqNum));
+                });
+            }
+            displayImages();
+            renderPagination();
+        });
+    }
+
+    // الصور المفلترة
+    function getFilteredImages() {
+        if (currentFilter === "الكل") return allImages;
+        return allImages.filter(img => img.family === currentFilter);
+    }
+
+    // عرض الصور
+    function displayImages() {
+        const filtered = getFilteredImages();
+        const totalImages = filtered.length;
+        
+        if (totalImages === 0) {
+            imagesGrid.innerHTML = '<div class="empty-msg"><i class="fas fa-folder-open"></i> لا توجد صور في هذه العائلة</div>';
+            return;
+        }
+
+        const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
+        const endIndex = Math.min(startIndex + IMAGES_PER_PAGE, totalImages);
+        const pageImages = filtered.slice(startIndex, endIndex);
+
+        let html = '';
+        for (let img of pageImages) {
+            html += `
+                <div class="image-card" data-url="${img.url}">
+                    <img src="${img.url}" alt="صورة" loading="lazy">
+                    <div class="image-info">
+                        <span class="seq-badge"><i class="fas fa-hashtag"></i> ${escapeHtml(img.seqNum)}</span>
+                        <span class="family-badge"><i class="fas fa-users"></i> ${escapeHtml(img.family)}</span>
+                    </div>
+                </div>
+            `;
+        }
+        imagesGrid.innerHTML = html;
+
+        document.querySelectorAll('.image-card').forEach(card => {
+            card.addEventListener('click', () => {
+                viewImage.src = card.getAttribute('data-url');
+                viewModal.style.display = 'flex';
+            });
+        });
+    }
+
+    // إنشاء أرقام الصفحات الذكية
+    function generatePageNumbers(totalPages) {
+        if (totalPages <= 1) return [1];
+        
+        let pages = [];
+        
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } 
+        else {
+            pages.push(1, 2, 3);
+            
+            if (currentPage > 4 && currentPage < totalPages - 3) {
+                pages.push('...');
+                pages.push(currentPage - 1, currentPage, currentPage + 1);
+                pages.push('...');
+                pages.push(totalPages - 2, totalPages - 1, totalPages);
+            }
+            else if (currentPage <= 4) {
+                pages.push(4, 5, '...');
+                pages.push(totalPages - 2, totalPages - 1, totalPages);
+            }
+            else if (currentPage >= totalPages - 3) {
+                pages.push('...');
+                for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+            }
+            
+            pages = [...new Set(pages)];
+            
+            const cleaned = [];
+            let lastWasDot = false;
+            for (let p of pages) {
+                if (p === '...') {
+                    if (!lastWasDot) cleaned.push(p);
+                    lastWasDot = true;
+                } else {
+                    cleaned.push(p);
+                    lastWasDot = false;
+                }
+            }
+            pages = cleaned;
+        }
+        
+        return pages;
+    }
+
+    // عرض الترقيم في الأسفل (يظهر دائماً)
+    function renderPagination() {
+        const filtered = getFilteredImages();
+        const totalImages = filtered.length;
+        const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
+        
+        const pages = generatePageNumbers(totalPages);
+        
+        const prevDisabled = currentPage === 1;
+        const nextDisabled = currentPage === totalPages;
+        
+        let html = `
+            <button class="page-btn ${prevDisabled ? 'disabled' : ''}" data-page="prev" ${prevDisabled ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        
+        for (let p of pages) {
+            if (p === '...') {
+                html += `<span class="page-dots"><i class="fas fa-ellipsis-h"></i></span>`;
+            } else {
+                html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
+            }
+        }
+        
+        html += `
+            <button class="page-btn ${nextDisabled ? 'disabled' : ''}" data-page="next" ${nextDisabled ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        paginationDiv.innerHTML = html;
+        
+        // إضافة الأحداث
+        document.querySelectorAll('#pagination .page-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('disabled')) return;
+                const action = btn.getAttribute('data-page');
+                let newPage = currentPage;
+                
+                if (action === 'prev' && currentPage > 1) newPage = currentPage - 1;
+                else if (action === 'next' && currentPage < totalPages) newPage = currentPage + 1;
+                else if (!isNaN(parseInt(action))) newPage = parseInt(action);
+                
+                if (newPage !== currentPage) {
+                    currentPage = newPage;
+                    displayImages();
+                    renderPagination();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+
+    loadFamilies();
+    loadImages();
+</script>
+</body>
+</html>
