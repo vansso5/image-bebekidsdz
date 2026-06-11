@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>لوحة الإدارة | معرض الصور</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* شريط علوي */
+        .top-bar {
+            background: white;
+            padding: 12px 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i {
+            font-size: 1.5rem;
+            color: #1b74e4;
+        }
+        .logo span {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1b74e4;
+        }
+        .badge {
+            background: #e4e6eb;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+        }
+
+        /* حاوية رئيسية */
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        /* بطاقات */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        .card-header i {
+            font-size: 1.1rem;
+            color: #1b74e4;
+        }
+        .card-body {
+            padding: 16px;
+        }
+
+        /* أزرار الكاميرا والألبوم */
+        .camera-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .cam-btn {
+            flex: 1;
+            background: #e4e6eb;
+            border: none;
+            padding: 14px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .cam-btn:active {
+            transform: scale(0.97);
+            background: #d1d5db;
+        }
+        .cam-btn i {
+            font-size: 1rem;
+        }
+
+        /* حقول الإدخال */
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #ccd0d5;
+            font-size: 0.9rem;
+            background: white;
+            margin-bottom: 12px;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #1b74e4;
+            box-shadow: 0 0 0 2px rgba(27,116,228,0.2);
+        }
+
+        /* زر رئيسي */
+        .btn-primary {
+            background: #1b74e4;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary:active {
+            background: #166fe5;
+            transform: scale(0.98);
+        }
+
+        /* زر ثانوي */
+        .btn-secondary {
+            background: #e4e6eb;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* زر أيقونة */
+        .btn-icon {
+            background: transparent;
+            padding: 8px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-icon:active {
+            background: #e4e6eb;
+        }
+
+        /* أزرار الفلترة (العائلات) */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+        .filter-btn {
+            background: #e4e6eb;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .filter-btn.active {
+            background: #1b74e4;
+            color: white;
+        }
+        .filter-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* قسم العائلات (الإدارة) */
+        .families-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            cursor: pointer;
+        }
+        .toggle-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        .toggle-arrow {
+            transition: transform 0.2s;
+            font-size: 0.8rem;
+        }
+        .toggle-arrow.rotated {
+            transform: rotate(180deg);
+        }
+        .families-collapsible {
+            display: none;
+            padding: 0 16px 16px 16px;
+        }
+        .families-collapsible.show {
+            display: block;
+        }
+        .families-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .family-item {
+            background: #f0f2f5;
+            padding: 6px 12px 6px 8px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+        .family-item span {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* شبكة الصور - 2 في الهاتف */
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .image-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            border: 1px solid #e4e6eb;
+        }
+        .image-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .image-info {
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+            border-top: 1px solid #e4e6eb;
+        }
+        .seq-badge {
+            background: #e7f3ff;
+            padding: 4px 6px;
+            border-radius: 16px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #1b74e4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 85px;
+        }
+        .image-actions {
+            display: flex;
+            gap: 2px;
+        }
+
+        /* رسائل */
+        .empty-msg {
+            text-align: center;
+            padding: 40px;
+            color: #65676b;
+            grid-column: 1/-1;
+            font-size: 0.85rem;
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: #050505;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+        }
+
+        /* مودالات */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 340px;
+        }
+        .modal-content h3 {
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccd0d5;
+            margin: 6px 0;
+            font-size: 0.85rem;
+        }
+        .flex-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .flex-btns button {
+            flex: 1;
+        }
+        .change-img-btn {
+            background: #e4e6eb;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin: 6px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        hr {
+            margin: 10px 0;
+            border: none;
+            border-top: 1px solid #e4e6eb;
+        }
+
+        /* إخفاء عناصر input */
+        .hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* للشاشات الأكبر */
+        @media (min-width: 600px) {
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+            .images-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
+            .images-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="logo">
+        <i class="fas fa-camera"></i>
+        <span>معرض الصور</span>
+        <div class="badge"><i class="fas fa-user-shield"></i> إدارة</div>
+    </div>
+    <div><i class="fas fa-database"></i></div>
+</div>
+
+<div class="container">
+    <!-- عناصر مخفية -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden-input">
+    <input type="file" id="galleryInput" accept="image/*" class="hidden-input">
+
+    <!-- إضافة صورة جديدة -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-plus-circle"></i>
+            <span>إضافة صورة جديدة</span>
+        </div>
+        <div class="card-body">
+            <div class="camera-row">
+                <button id="cameraBtn" class="cam-btn"><i class="fas fa-camera"></i> كاميرا</button>
+                <button id="galleryBtn" class="cam-btn"><i class="fas fa-images"></i> الألبوم</button>
+            </div>
+            <input type="text" id="seqNum" class="input-field" placeholder="🔢 الرقم التسلسلي (مثال: A12, #5, 01-23)">
+            <select id="familySelect" class="input-field">
+                <option value="" disabled selected>-- اختر عائلة --</option>
+            </select>
+            <button id="submitImageBtn" class="btn-primary"><i class="fas fa-cloud-upload-alt"></i> رفع وحفظ</button>
+        </div>
+    </div>
+
+    <!-- أزرار فلترة العائلات -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-filter"></i>
+            <span>تصفية حسب العائلة</span>
+        </div>
+        <div class="card-body">
+            <div id="filterBar" class="filter-bar">
+                <button class="filter-btn active" data-family="الكل">🌟 الكل</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- إدارة العائلات (قابلة للطي) -->
+    <div class="card">
+        <div class="families-toggle" id="familiesToggle">
+            <div class="toggle-title">
+                <i class="fas fa-users"></i>
+                <span>إدارة العائلات</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button id="addFamilyBtn" class="btn-secondary" style="padding:5px 10px"><i class="fas fa-plus"></i> جديد</button>
+                <i class="fas fa-chevron-down toggle-arrow" id="toggleArrow"></i>
+            </div>
+        </div>
+        <div class="families-collapsible" id="familiesCollapsible">
+            <div id="familiesList" class="families-list">⏳ جاري التحميل...</div>
+        </div>
+    </div>
+
+    <!-- جميع الصور -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-th-large"></i>
+            <span>جميع الصور</span>
+        </div>
+        <div class="card-body">
+            <div id="imagesList" class="images-grid">⏳ جاري التحميل...</div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال تعديل الصورة -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-edit"></i> تعديل الصورة</h3>
+        <div style="display: flex; gap: 8px;">
+            <button id="editChangeImageCameraBtn" class="change-img-btn" style="flex:1"><i class="fas fa-camera"></i> كاميرا</button>
+            <button id="editChangeImageGalleryBtn" class="change-img-btn" style="flex:1"><i class="fas fa-images"></i> ألبوم</button>
+        </div>
+        <div id="editImagePreview" style="width:70px; height:70px; margin:8px auto; border-radius:12px; overflow:hidden; background:#e4e6eb; display:none">
+            <img id="editImagePreviewImg" style="width:100%; height:100%; object-fit:cover">
+        </div>
+        <hr>
+        <input type="text" id="editSeqNum" placeholder="الرقم التسلسلي">
+        <select id="editFamily"></select>
+        <div class="flex-btns">
+            <button id="saveEditBtn" class="btn-primary">💾 حفظ</button>
+            <button id="closeModalBtn" class="btn-secondary">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- مودال تكبير الصورة -->
+<div id="viewModal" class="modal" style="background:rgba(0,0,0,0.85);">
+    <div style="max-width:90%; max-height:90%;">
+        <img id="viewImage" src="" style="width:auto; max-width:100%; max-height:90vh; border-radius:12px;">
+    </div>
+</div>
+
+<div id="toast" class="toast-msg"></div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBWkToQTcMKSPlCOL_5t8v6QU5If4mYAbk",
+        authDomain: "kids-sky.firebaseapp.com",
+        databaseURL: "https://kids-sky-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kids-sky",
+        storageBucket: "kids-sky.firebasestorage.app",
+        messagingSenderId: "1087927781371",
+        appId: "1:1087927781371:web:6e8c11b3dd9f3db0de6d5e",
+        measurementId: "G-M1PX9F2LV7"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const IMGBB_API_KEY = "c1e6129bab357e6d2a74b4b9138cbd21";
+
+    let currentEditImageId = null;
+    let currentEditNewImageFile = null;
+    let familiesList = [];
+    let allImages = [];
+    let currentFilter = "الكل";
+    let currentImageFile = null;
+
+    // عناصر
+    const cameraBtn = document.getElementById('cameraBtn');
+    const galleryBtn = document.getElementById('galleryBtn');
+    const cameraInput = document.getElementById('cameraInput');
+    const galleryInput = document.getElementById('galleryInput');
+    const seqNumInput = document.getElementById('seqNum');
+    const familySelect = document.getElementById('familySelect');
+    const submitImageBtn = document.getElementById('submitImageBtn');
+    const familiesToggle = document.getElementById('familiesToggle');
+    const familiesCollapsible = document.getElementById('familiesCollapsible');
+    const toggleArrow = document.getElementById('toggleArrow');
+    const familiesListDiv = document.getElementById('familiesList');
+    const imagesListDiv = document.getElementById('imagesList');
+    const addFamilyBtn = document.getElementById('addFamilyBtn');
+    const editModal = document.getElementById('editModal');
+    const editSeqNum = document.getElementById('editSeqNum');
+    const editFamily = document.getElementById('editFamily');
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const viewModal = document.getElementById('viewModal');
+    const viewImage = document.getElementById('viewImage');
+    const toast = document.getElementById('toast');
+    const editChangeImageCameraBtn = document.getElementById('editChangeImageCameraBtn');
+    const editChangeImageGalleryBtn = document.getElementById('editChangeImageGalleryBtn');
+    const editImagePreview = document.getElementById('editImagePreview');
+    const editImagePreviewImg = document.getElementById('editImagePreviewImg');
+    const filterBar = document.getElementById('filterBar');
+
+    function showToast(msg, isError=false) {
+        toast.innerText = msg;
+        toast.style.display = 'block';
+        toast.style.background = isError ? '#e41e3f' : '#1b74e4';
+        setTimeout(() => toast.style.display = 'none', 2500);
+    }
+
+    // الكاميرا والألبوم للإضافة
+    cameraBtn.addEventListener('click', () => {
+        cameraInput.value = '';
+        cameraInput.click();
+    });
+    galleryBtn.addEventListener('click', () => {
+        galleryInput.value = '';
+        galleryInput.click();
+    });
+    cameraInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            currentImageFile = e.target.files[0];
+            showToast(`✅ تم التقاط صورة`);
+        }
+    });
+    galleryInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            currentImageFile = e.target.files[0];
+            showToast(`✅ تم اختيار صورة`);
+        }
+    });
+
+    // تحميل العائلات
+    function loadFamilies() {
+        db.ref('families').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            familiesList = Object.keys(data);
+            updateFamilySelects();
+            renderFamiliesUI();
+            renderFilterButtons();
+        });
+    }
+    
+    function updateFamilySelects() {
+        let options = '<option value="" disabled selected>-- اختر عائلة --</option>';
+        familiesList.forEach(f => options += `<option value="${f}">${f}</option>`);
+        familySelect.innerHTML = options;
+        editFamily.innerHTML = options;
+    }
+    
+    function renderFilterButtons() {
+        let html = `<button class="filter-btn ${currentFilter === 'الكل' ? 'active' : ''}" data-family="الكل">🌟 الكل</button>`;
+        familiesList.forEach(family => {
+            html += `<button class="filter-btn ${currentFilter === family ? 'active' : ''}" data-family="${family}">👪 ${family}</button>`;
+        });
+        filterBar.innerHTML = html;
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFilter = btn.getAttribute('data-family');
+                renderFilterButtons();
+                displayImages();
+            });
+        });
+    }
+    
+    function renderFamiliesUI() {
+        if (familiesList.length === 0) {
+            familiesListDiv.innerHTML = '<div class="empty-msg">➕ أضف أول عائلة</div>';
+            return;
+        }
+        let html = '';
+        for (let name of familiesList) {
+            html += `
+                <div class="family-item">
+                    <span>${escapeHtml(name)}</span>
+                    <button class="btn-icon edit-family" data-name="${name}" title="تعديل"><i class="fas fa-pen" style="font-size:0.75rem"></i></button>
+                    <button class="btn-icon delete-family" data-name="${name}" title="حذف"><i class="fas fa-trash-alt" style="font-size:0.75rem"></i></button>
+                </div>
+            `;
+        }
+        familiesListDiv.innerHTML = html;
+        
+        document.querySelectorAll('.edit-family').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const oldName = btn.getAttribute('data-name');
+                const newName = prompt("الاسم الجديد:", oldName);
+                if (newName && newName.trim() && newName !== oldName) renameFamily(oldName, newName.trim());
+            });
+        });
+        document.querySelectorAll('.delete-family').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const familyName = btn.getAttribute('data-name');
+                if (confirm(`⚠️ حذف العائلة "${familyName}" وجميع صورها؟`)) deleteFamilyAndImages(familyName);
+            });
+        });
+    }
+    
+    async function renameFamily(oldName, newName) {
+        if (familiesList.includes(newName)) { showToast("الاسم موجود!", true); return; }
+        await db.ref(`families/${oldName}`).remove();
+        await db.ref(`families/${newName}`).set(true);
+        const snap = await db.ref('images').once('value');
+        const updates = {};
+        snap.forEach(child => { if (child.val().family === oldName) updates[`${child.key}/family`] = newName; });
+        await db.ref('images').update(updates);
+        showToast(`✅ تم التغيير إلى "${newName}"`);
+    }
+    
+    async function deleteFamilyAndImages(familyName) {
+        const snap = await db.ref('images').once('value');
+        const promises = [];
+        snap.forEach(child => { if (child.val().family === familyName) promises.push(db.ref(`images/${child.key}`).remove()); });
+        await Promise.all(promises);
+        await db.ref(`families/${familyName}`).remove();
+        showToast(`🗑️ تم حذف العائلة`);
+    }
+    
+    addFamilyBtn.addEventListener('click', () => {
+        const newName = prompt("اسم العائلة الجديدة:");
+        if (newName && newName.trim()) {
+            const name = newName.trim();
+            if (familiesList.includes(name)) { showToast("موجودة مسبقاً", true); return; }
+            db.ref(`families/${name}`).set(true).then(() => showToast(`✅ تمت إضافة "${name}"`));
+        }
+    });
+
+    // رفع الصورة
+    async function uploadToImgbb(file) {
+        const fd = new FormData();
+        fd.append("key", IMGBB_API_KEY);
+        fd.append("image", file);
+        const res = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
+        const data = await res.json();
+        if (data.success) return data.data.url;
+        throw new Error(data.error?.message);
+    }
+    
+    submitImageBtn.addEventListener('click', async () => {
+        if (!currentImageFile) { showToast("❌ اختر صورة أولاً", true); return; }
+        const seqNum = seqNumInput.value.trim();
+        const selectedFamily = familySelect.value;
+        if (!seqNum) { showToast("❌ أدخل رقم تسلسلي", true); return; }
+        if (!selectedFamily) { showToast("❌ اختر عائلة", true); return; }
+        try {
+            showToast("⏳ جاري الرفع...");
+            const url = await uploadToImgbb(currentImageFile);
+            await db.ref('images').push({ url, seqNum, family: selectedFamily, timestamp: Date.now() });
+            currentImageFile = null;
+            cameraInput.value = '';
+            galleryInput.value = '';
+            seqNumInput.value = '';
+            familySelect.value = '';
+            showToast("✅ تمت الإضافة");
+        } catch(err) { showToast("❌ خطأ: "+err.message, true); }
+    });
+
+    // تحميل الصور
+    function loadImages() {
+        db.ref('images').on('value', (snapshot) => {
+            const images = snapshot.val();
+            allImages = [];
+            if (images) {
+                allImages = Object.entries(images).map(([id,data]) => ({ id, ...data }));
+                allImages.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+            }
+            displayImages();
+        });
+    }
+    
+    function displayImages() {
+        let filtered = allImages;
+        if (currentFilter !== "الكل") {
+            filtered = allImages.filter(img => img.family === currentFilter);
+        }
+        
+        if (filtered.length === 0) {
+            imagesListDiv.innerHTML = '<div class="empty-msg">📭 لا توجد صور في هذه العائلة</div>';
+            return;
+        }
+        
+        let html = '';
+        for (let img of filtered) {
+            html += `
+                <div class="image-card">
+                    <img src="${img.url}" class="view-img" data-url="${img.url}">
+                    <div class="image-info">
+                        <span class="seq-badge" title="${escapeHtml(img.seqNum)}">🔢 ${escapeHtml(img.seqNum)}</span>
+                        <div class="image-actions">
+                            <button class="btn-icon edit-img" data-id="${img.id}" data-seq="${escapeHtml(img.seqNum)}" data-family="${img.family}"><i class="fas fa-pen" style="font-size:0.7rem"></i></button>
+                            <button class="btn-icon delete-img" data-id="${img.id}"><i class="fas fa-trash-alt" style="font-size:0.7rem"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        imagesListDiv.innerHTML = html;
+        
+        document.querySelectorAll('.view-img').forEach(el => el.addEventListener('click', () => { viewImage.src = el.dataset.url; viewModal.style.display='flex'; }));
+        document.querySelectorAll('.edit-img').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentEditImageId = btn.dataset.id;
+                editSeqNum.value = btn.dataset.seq;
+                editFamily.value = btn.dataset.family;
+                currentEditNewImageFile = null;
+                editImagePreview.style.display = 'none';
+                editModal.style.display = 'flex';
+            });
+        });
+        document.querySelectorAll('.delete-img').forEach(btn => {
+            btn.addEventListener('click', async () => { if(confirm("🗑️ حذف الصورة؟")) await db.ref(`images/${btn.dataset.id}`).remove(); showToast("تم الحذف"); });
+        });
+    }
+    
+    // كاميرا وألبوم التعديل
+    const editCameraInput = document.createElement('input');
+    editCameraInput.type = 'file';
+    editCameraInput.accept = 'image/*';
+    editCameraInput.capture = 'environment';
+    editCameraInput.style.display = 'none';
+    document.body.appendChild(editCameraInput);
+    
+    const editGalleryInput = document.createElement('input');
+    editGalleryInput.type = 'file';
+    editGalleryInput.accept = 'image/*';
+    editGalleryInput.style.display = 'none';
+    document.body.appendChild(editGalleryInput);
+    
+    editChangeImageCameraBtn.addEventListener('click', () => {
+        editCameraInput.value = '';
+        editCameraInput.click();
+    });
+    editChangeImageGalleryBtn.addEventListener('click', () => {
+        editGalleryInput.value = '';
+        editGalleryInput.click();
+    });
+    
+    function handleEditImageFile(file) {
+        if (file) {
+            currentEditNewImageFile = file;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                editImagePreviewImg.src = event.target.result;
+                editImagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            showToast("📸 تم اختيار صورة جديدة");
+        }
+    }
+    
+    editCameraInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) handleEditImageFile(e.target.files[0]);
+    });
+    editGalleryInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) handleEditImageFile(e.target.files[0]);
+    });
+    
+    saveEditBtn.addEventListener('click', async () => {
+        if (!currentEditImageId) return;
+        const newSeq = editSeqNum.value.trim();
+        const newFamily = editFamily.value;
+        if (!newSeq || !newFamily) { showToast("❌ املأ الحقول", true); return; }
+        try {
+            let updateData = { seqNum: newSeq, family: newFamily };
+            if (currentEditNewImageFile) {
+                showToast("⏳ جاري رفع الصورة...");
+                const newUrl = await uploadToImgbb(currentEditNewImageFile);
+                updateData.url = newUrl;
+            }
+            await db.ref(`images/${currentEditImageId}`).update(updateData);
+            showToast("✅ تم التحديث");
+            editModal.style.display = 'none';
+            currentEditNewImageFile = null;
+            editImagePreview.style.display = 'none';
+        } catch(err) { showToast("❌ خطأ: "+err.message, true); }
+    });
+    
+    closeModalBtn.addEventListener('click', () => { editModal.style.display='none'; currentEditNewImageFile = null; });
+    viewModal.addEventListener('click', () => viewModal.style.display='none');
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+
+    // قابلة للطي
+    familiesToggle.addEventListener('click', () => {
+        familiesCollapsible.classList.toggle('show');
+        toggleArrow.classList.toggle('rotated');
+    });
+
+    loadFamilies();
+    loadImages();
+</script>
+</body>
+</html>
