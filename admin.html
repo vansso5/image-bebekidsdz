@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* شريط علوي */
         .top-bar {
             background: white;
             padding: 12px 16px;
@@ -58,7 +57,6 @@
             font-size: 0.65rem;
         }
 
-        /* حاوية رئيسية */
         .container {
             width: 100%;
             max-width: 100%;
@@ -66,7 +64,6 @@
             padding: 12px;
         }
 
-        /* بطاقات */
         .card {
             background: white;
             border-radius: 16px;
@@ -91,7 +88,6 @@
             padding: 16px;
         }
 
-        /* أزرار الكاميرا والألبوم */
         .camera-row {
             display: flex;
             gap: 12px;
@@ -116,11 +112,7 @@
             transform: scale(0.97);
             background: #d1d5db;
         }
-        .cam-btn i {
-            font-size: 1rem;
-        }
 
-        /* حقول الإدخال */
         .input-field {
             width: 100%;
             padding: 14px;
@@ -133,10 +125,8 @@
         .input-field:focus {
             outline: none;
             border-color: #1b74e4;
-            box-shadow: 0 0 0 2px rgba(27,116,228,0.2);
         }
 
-        /* زر رئيسي */
         .btn-primary {
             background: #1b74e4;
             color: white;
@@ -154,10 +144,8 @@
         }
         .btn-primary:active {
             background: #166fe5;
-            transform: scale(0.98);
         }
 
-        /* زر ثانوي */
         .btn-secondary {
             background: #e4e6eb;
             padding: 8px 16px;
@@ -167,7 +155,6 @@
             font-size: 0.8rem;
         }
 
-        /* زر أيقونة */
         .btn-icon {
             background: transparent;
             padding: 8px;
@@ -184,7 +171,6 @@
             background: #e4e6eb;
         }
 
-        /* أزرار الفلترة (العائلات) */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -200,18 +186,13 @@
             font-size: 0.8rem;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
             white-space: nowrap;
         }
         .filter-btn.active {
             background: #1b74e4;
             color: white;
         }
-        .filter-btn:active {
-            transform: scale(0.95);
-        }
 
-        /* قسم العائلات (الإدارة) */
         .families-toggle {
             display: flex;
             align-items: center;
@@ -253,14 +234,65 @@
             gap: 6px;
             font-size: 0.8rem;
         }
-        .family-item span {
-            max-width: 100px;
+
+        .preview-area {
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+        .preview-title {
+            font-size: 0.75rem;
+            color: #65676b;
+            margin-bottom: 8px;
+        }
+        .preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .preview-item {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            border: 2px solid #1b74e4;
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-remove {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e41e3f;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            border: none;
+        }
+        .add-more-btn {
+            background: #e4e6eb;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        /* شبكة الصور - 2 في الهاتف */
         .images-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -303,8 +335,13 @@
             display: flex;
             gap: 2px;
         }
+        .photos-count {
+            font-size: 0.6rem;
+            color: #65676b;
+            margin-top: 4px;
+            text-align: center;
+        }
 
-        /* رسائل */
         .empty-msg {
             text-align: center;
             padding: 40px;
@@ -327,7 +364,6 @@
             text-align: center;
         }
 
-        /* مودالات */
         .modal {
             display: none;
             position: fixed;
@@ -335,7 +371,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.85);
             justify-content: center;
             align-items: center;
             z-index: 1001;
@@ -345,7 +381,9 @@
             border-radius: 20px;
             padding: 20px;
             width: 90%;
-            max-width: 340px;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         .modal-content h3 {
             margin-bottom: 14px;
@@ -389,7 +427,42 @@
             border-top: 1px solid #e4e6eb;
         }
 
-        /* إخفاء عناصر input */
+        .edit-images-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .edit-image-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e4e6eb;
+        }
+        .edit-image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .edit-image-delete {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(228,30,63,0.9);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 11px;
+        }
+
         .hidden-input {
             position: absolute;
             opacity: 0;
@@ -398,28 +471,109 @@
             pointer-events: none;
         }
 
-        /* للشاشات الأكبر */
-        @media (min-width: 600px) {
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
+        .search-box {
+            margin-bottom: 16px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 30px;
+            border: 1px solid #ccd0d5;
+            font-size: 0.9rem;
+            background: white;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #1b74e4;
+        }
+
+        .viewer-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .viewer-image {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .nav-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .nav-prev {
+            left: 20px;
+        }
+        .nav-next {
+            right: 20px;
+        }
+        .close-viewer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        .image-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+        @media (max-width: 768px) {
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
+            .nav-prev { left: 10px; }
+            .nav-next { right: 10px; }
+        }
+
+        @media (min-width: 600px) {
+            .container { max-width: 600px; margin: 0 auto; }
         }
         @media (min-width: 768px) {
-            .container {
-                max-width: 750px;
-            }
-            .images-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            .container { max-width: 750px; }
+            .images-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (min-width: 1024px) {
-            .container {
-                max-width: 1000px;
-            }
-            .images-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            .container { max-width: 1000px; }
+            .images-grid { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 </head>
@@ -435,15 +589,15 @@
 </div>
 
 <div class="container">
-    <!-- عناصر مخفية -->
     <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden-input">
     <input type="file" id="galleryInput" accept="image/*" class="hidden-input">
+    <input type="file" id="editCameraInput" accept="image/*" capture="environment" class="hidden-input">
+    <input type="file" id="editGalleryInput" accept="image/*" class="hidden-input">
 
-    <!-- إضافة صورة جديدة -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-plus-circle"></i>
-            <span>إضافة صورة جديدة</span>
+            <span>إضافة منتج جديد</span>
         </div>
         <div class="card-body">
             <div class="camera-row">
@@ -454,11 +608,19 @@
             <select id="familySelect" class="input-field">
                 <option value="" disabled selected>-- اختر عائلة --</option>
             </select>
-            <button id="submitImageBtn" class="btn-primary"><i class="fas fa-cloud-upload-alt"></i> رفع وحفظ</button>
+            
+            <div id="previewArea" class="preview-area" style="display:none;">
+                <div class="preview-title">📸 الصور المرفوعة:</div>
+                <div id="previewGrid" class="preview-grid"></div>
+                <button id="addMoreImagesBtn" class="add-more-btn">
+                    <i class="fas fa-plus-circle"></i> إضافة صورة أخرى
+                </button>
+            </div>
+            
+            <button id="submitImageBtn" class="btn-primary"><i class="fas fa-cloud-upload-alt"></i> حفظ جميع الصور</button>
         </div>
     </div>
 
-    <!-- أزرار فلترة العائلات -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-filter"></i>
@@ -471,7 +633,6 @@
         </div>
     </div>
 
-    <!-- إدارة العائلات (قابلة للطي) -->
     <div class="card">
         <div class="families-toggle" id="familiesToggle">
             <div class="toggle-title">
@@ -488,11 +649,22 @@
         </div>
     </div>
 
-    <!-- جميع الصور -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-search"></i>
+            <span>بحث</span>
+        </div>
+        <div class="card-body">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 بحث بالرقم التسلسلي أو اسم العائلة...">
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <i class="fas fa-th-large"></i>
-            <span>جميع الصور</span>
+            <span>المنتجات</span>
         </div>
         <div class="card-body">
             <div id="imagesList" class="images-grid">⏳ جاري التحميل...</div>
@@ -500,31 +672,41 @@
     </div>
 </div>
 
-<!-- مودال تعديل الصورة -->
-<div id="editModal" class="modal">
+<div id="editModal" class="modal" style="background:rgba(0,0,0,0.5);">
     <div class="modal-content">
-        <h3><i class="fas fa-edit"></i> تعديل الصورة</h3>
-        <div style="display: flex; gap: 8px;">
-            <button id="editChangeImageCameraBtn" class="change-img-btn" style="flex:1"><i class="fas fa-camera"></i> كاميرا</button>
-            <button id="editChangeImageGalleryBtn" class="change-img-btn" style="flex:1"><i class="fas fa-images"></i> ألبوم</button>
-        </div>
-        <div id="editImagePreview" style="width:70px; height:70px; margin:8px auto; border-radius:12px; overflow:hidden; background:#e4e6eb; display:none">
-            <img id="editImagePreviewImg" style="width:100%; height:100%; object-fit:cover">
-        </div>
-        <hr>
+        <h3><i class="fas fa-edit"></i> تعديل المنتج</h3>
         <input type="text" id="editSeqNum" placeholder="الرقم التسلسلي">
         <select id="editFamily"></select>
+        
+        <div id="editImagesContainer" style="margin: 12px 0;">
+            <div class="preview-title">📸 صور المنتج:</div>
+            <div id="editImagesGrid" class="edit-images-grid"></div>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin: 10px 0;">
+            <button id="editCameraBtn" class="change-img-btn" style="flex:1"><i class="fas fa-camera"></i> إضافة صورة</button>
+            <button id="editGalleryBtn" class="change-img-btn" style="flex:1"><i class="fas fa-images"></i> من الألبوم</button>
+        </div>
+        
+        <div id="editPreviewArea" class="preview-area" style="display:none;">
+            <div class="preview-title">➕ صور جديدة:</div>
+            <div id="editPreviewGrid" class="preview-grid"></div>
+        </div>
+        
         <div class="flex-btns">
-            <button id="saveEditBtn" class="btn-primary">💾 حفظ</button>
+            <button id="saveEditBtn" class="btn-primary">💾 حفظ التغييرات</button>
             <button id="closeModalBtn" class="btn-secondary">إلغاء</button>
         </div>
     </div>
 </div>
 
-<!-- مودال تكبير الصورة -->
-<div id="viewModal" class="modal" style="background:rgba(0,0,0,0.85);">
-    <div style="max-width:90%; max-height:90%;">
-        <img id="viewImage" src="" style="width:auto; max-width:100%; max-height:90vh; border-radius:12px;">
+<div id="viewModal" class="modal">
+    <div class="viewer-container">
+        <button class="close-viewer" id="closeViewerBtn"><i class="fas fa-times"></i></button>
+        <button class="nav-btn nav-prev" id="prevImageBtn"><i class="fas fa-chevron-right"></i></button>
+        <button class="nav-btn nav-next" id="nextImageBtn"><i class="fas fa-chevron-left"></i></button>
+        <img id="viewImage" class="viewer-image" src="">
+        <div class="image-counter" id="imageCounter"></div>
     </div>
 </div>
 
@@ -545,12 +727,20 @@
     const db = firebase.database();
     const IMGBB_API_KEY = "c1e6129bab357e6d2a74b4b9138cbd21";
 
-    let currentEditImageId = null;
-    let currentEditNewImageFile = null;
+    let currentEditSeqNum = null;
+    let currentEditFamily = null;
+    let currentEditExistingImages = [];
+    let currentEditNewImages = [];
     let familiesList = [];
     let allImages = [];
     let currentFilter = "الكل";
-    let currentImageFile = null;
+    let currentSearchTerm = "";
+    let pendingImages = [];
+    
+    let currentViewerImages = [];
+    let currentViewerIndex = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
 
     // عناصر
     const cameraBtn = document.getElementById('cameraBtn');
@@ -560,6 +750,10 @@
     const seqNumInput = document.getElementById('seqNum');
     const familySelect = document.getElementById('familySelect');
     const submitImageBtn = document.getElementById('submitImageBtn');
+    const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
+    const previewArea = document.getElementById('previewArea');
+    const previewGrid = document.getElementById('previewGrid');
+    
     const familiesToggle = document.getElementById('familiesToggle');
     const familiesCollapsible = document.getElementById('familiesCollapsible');
     const toggleArrow = document.getElementById('toggleArrow');
@@ -574,11 +768,18 @@
     const viewModal = document.getElementById('viewModal');
     const viewImage = document.getElementById('viewImage');
     const toast = document.getElementById('toast');
-    const editChangeImageCameraBtn = document.getElementById('editChangeImageCameraBtn');
-    const editChangeImageGalleryBtn = document.getElementById('editChangeImageGalleryBtn');
-    const editImagePreview = document.getElementById('editImagePreview');
-    const editImagePreviewImg = document.getElementById('editImagePreviewImg');
-    const filterBar = document.getElementById('filterBar');
+    const editCameraBtn = document.getElementById('editCameraBtn');
+    const editGalleryBtn = document.getElementById('editGalleryBtn');
+    const editCameraInput = document.getElementById('editCameraInput');
+    const editGalleryInput = document.getElementById('editGalleryInput');
+    const editImagesGrid = document.getElementById('editImagesGrid');
+    const editPreviewArea = document.getElementById('editPreviewArea');
+    const editPreviewGrid = document.getElementById('editPreviewGrid');
+    const searchInput = document.getElementById('searchInput');
+    const prevImageBtn = document.getElementById('prevImageBtn');
+    const nextImageBtn = document.getElementById('nextImageBtn');
+    const closeViewerBtn = document.getElementById('closeViewerBtn');
+    const imageCounter = document.getElementById('imageCounter');
 
     function showToast(msg, isError=false) {
         toast.innerText = msg;
@@ -587,7 +788,16 @@
         setTimeout(() => toast.style.display = 'none', 2500);
     }
 
-    // الكاميرا والألبوم للإضافة
+    function addImageToPending(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            pendingImages.push({ file, previewUrl: event.target.result });
+            updatePreviewArea();
+        };
+        reader.readAsDataURL(file);
+    }
+    
     cameraBtn.addEventListener('click', () => {
         cameraInput.value = '';
         cameraInput.click();
@@ -596,20 +806,92 @@
         galleryInput.value = '';
         galleryInput.click();
     });
+    
     cameraInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            currentImageFile = e.target.files[0];
-            showToast(`✅ تم التقاط صورة`);
-        }
+        if (e.target.files.length > 0) addImageToPending(e.target.files[0]);
     });
     galleryInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            currentImageFile = e.target.files[0];
-            showToast(`✅ تم اختيار صورة`);
+        if (e.target.files.length > 0) addImageToPending(e.target.files[0]);
+    });
+    
+    function updatePreviewArea() {
+        if (pendingImages.length === 0) {
+            previewArea.style.display = 'none';
+            return;
+        }
+        previewArea.style.display = 'block';
+        let html = '';
+        pendingImages.forEach((img, index) => {
+            html += `
+                <div class="preview-item">
+                    <img src="${img.previewUrl}" alt="معاينة">
+                    <button class="preview-remove" data-index="${index}"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+        });
+        previewGrid.innerHTML = html;
+        
+        document.querySelectorAll('.preview-remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index);
+                pendingImages.splice(idx, 1);
+                updatePreviewArea();
+            });
+        });
+    }
+    
+    addMoreImagesBtn.addEventListener('click', () => {
+        galleryInput.click();
+    });
+    
+    async function uploadToImgbb(file) {
+        const fd = new FormData();
+        fd.append("key", IMGBB_API_KEY);
+        fd.append("image", file);
+        const res = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
+        const data = await res.json();
+        if (data.success) return data.data.url;
+        throw new Error(data.error?.message);
+    }
+    
+    submitImageBtn.addEventListener('click', async () => {
+        const seqNum = seqNumInput.value.trim();
+        const selectedFamily = familySelect.value;
+        
+        if (pendingImages.length === 0) { showToast("❌ أضف صورة أولاً", true); return; }
+        if (!seqNum) { showToast("❌ أدخل رقم تسلسلي", true); return; }
+        if (!selectedFamily) { showToast("❌ اختر عائلة", true); return; }
+        
+        try {
+            showToast(`⏳ جاري رفع ${pendingImages.length} صور...`);
+            
+            const uploadedUrls = [];
+            for (let i = 0; i < pendingImages.length; i++) {
+                const url = await uploadToImgbb(pendingImages[i].file);
+                uploadedUrls.push(url);
+            }
+            
+            const groupId = Date.now().toString();
+            for (let i = 0; i < uploadedUrls.length; i++) {
+                await db.ref(`images/${groupId}_img_${i}`).set({
+                    url: uploadedUrls[i],
+                    seqNum: seqNum,
+                    family: selectedFamily,
+                    groupId: groupId,
+                    timestamp: Date.now() + i
+                });
+            }
+            
+            pendingImages = [];
+            updatePreviewArea();
+            seqNumInput.value = '';
+            familySelect.value = '';
+            showToast("✅ تم حفظ جميع الصور");
+        } catch(err) { 
+            showToast("❌ خطأ: "+err.message, true); 
         }
     });
 
-    // تحميل العائلات
     function loadFamilies() {
         db.ref('families').on('value', (snapshot) => {
             const data = snapshot.val() || {};
@@ -670,7 +952,7 @@
         document.querySelectorAll('.delete-family').forEach(btn => {
             btn.addEventListener('click', () => {
                 const familyName = btn.getAttribute('data-name');
-                if (confirm(`⚠️ حذف العائلة "${familyName}" وجميع صورها؟`)) deleteFamilyAndImages(familyName);
+                if (confirm(`⚠️ حذف العائلة "${familyName}" وجميع منتجاتها؟`)) deleteFamilyAndImages(familyName);
             });
         });
     }
@@ -704,70 +986,68 @@
         }
     });
 
-    // رفع الصورة
-    async function uploadToImgbb(file) {
-        const fd = new FormData();
-        fd.append("key", IMGBB_API_KEY);
-        fd.append("image", file);
-        const res = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (data.success) return data.data.url;
-        throw new Error(data.error?.message);
+    function groupImages(images) {
+        const groups = new Map();
+        images.forEach(img => {
+            const key = `${img.seqNum}_${img.family}`;
+            if (!groups.has(key)) {
+                groups.set(key, {
+                    seqNum: img.seqNum,
+                    family: img.family,
+                    images: [],
+                    groupId: img.groupId || img.id
+                });
+            }
+            groups.get(key).images.push(img);
+        });
+        return Array.from(groups.values());
     }
-    
-    submitImageBtn.addEventListener('click', async () => {
-        if (!currentImageFile) { showToast("❌ اختر صورة أولاً", true); return; }
-        const seqNum = seqNumInput.value.trim();
-        const selectedFamily = familySelect.value;
-        if (!seqNum) { showToast("❌ أدخل رقم تسلسلي", true); return; }
-        if (!selectedFamily) { showToast("❌ اختر عائلة", true); return; }
-        try {
-            showToast("⏳ جاري الرفع...");
-            const url = await uploadToImgbb(currentImageFile);
-            await db.ref('images').push({ url, seqNum, family: selectedFamily, timestamp: Date.now() });
-            currentImageFile = null;
-            cameraInput.value = '';
-            galleryInput.value = '';
-            seqNumInput.value = '';
-            familySelect.value = '';
-            showToast("✅ تمت الإضافة");
-        } catch(err) { showToast("❌ خطأ: "+err.message, true); }
-    });
 
-    // تحميل الصور
     function loadImages() {
         db.ref('images').on('value', (snapshot) => {
-            const images = snapshot.val();
-            allImages = [];
-            if (images) {
-                allImages = Object.entries(images).map(([id,data]) => ({ id, ...data }));
-                allImages.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-            }
+            const data = snapshot.val() || {};
+            allImages = Object.entries(data).map(([id, img]) => ({ id, ...img }));
             displayImages();
         });
     }
     
     function displayImages() {
         let filtered = allImages;
+        
         if (currentFilter !== "الكل") {
-            filtered = allImages.filter(img => img.family === currentFilter);
+            filtered = filtered.filter(img => img.family === currentFilter);
         }
         
-        if (filtered.length === 0) {
-            imagesListDiv.innerHTML = '<div class="empty-msg">📭 لا توجد صور في هذه العائلة</div>';
+        if (currentSearchTerm) {
+            const term = currentSearchTerm.toLowerCase();
+            filtered = filtered.filter(img => 
+                img.seqNum?.toLowerCase().includes(term) || 
+                img.family?.toLowerCase().includes(term)
+            );
+        }
+        
+        const groups = groupImages(filtered);
+        
+        if (groups.length === 0) {
+            imagesListDiv.innerHTML = '<div class="empty-msg">📭 لا توجد منتجات</div>';
             return;
         }
         
         let html = '';
-        for (let img of filtered) {
+        for (let group of groups) {
+            const mainImage = group.images[0]?.url || '';
+            const imageCount = group.images.length;
             html += `
                 <div class="image-card">
-                    <img src="${img.url}" class="view-img" data-url="${img.url}">
+                    <img src="${mainImage}" class="view-img" data-seq="${escapeHtml(group.seqNum)}" data-family="${escapeHtml(group.family)}">
                     <div class="image-info">
-                        <span class="seq-badge" title="${escapeHtml(img.seqNum)}">🔢 ${escapeHtml(img.seqNum)}</span>
+                        <div>
+                            <span class="seq-badge" title="${escapeHtml(group.seqNum)}">🔢 ${escapeHtml(group.seqNum)}</span>
+                            <div class="photos-count">📸 ${imageCount} صورة</div>
+                        </div>
                         <div class="image-actions">
-                            <button class="btn-icon edit-img" data-id="${img.id}" data-seq="${escapeHtml(img.seqNum)}" data-family="${img.family}"><i class="fas fa-pen" style="font-size:0.7rem"></i></button>
-                            <button class="btn-icon delete-img" data-id="${img.id}"><i class="fas fa-trash-alt" style="font-size:0.7rem"></i></button>
+                            <button class="btn-icon edit-product" data-seq="${escapeHtml(group.seqNum)}" data-family="${group.family}" data-group-id="${group.groupId}"><i class="fas fa-pen" style="font-size:0.7rem"></i></button>
+                            <button class="btn-icon delete-product" data-seq="${escapeHtml(group.seqNum)}" data-family="${group.family}"><i class="fas fa-trash-alt" style="font-size:0.7rem"></i></button>
                         </div>
                     </div>
                 </div>
@@ -775,90 +1055,299 @@
         }
         imagesListDiv.innerHTML = html;
         
-        document.querySelectorAll('.view-img').forEach(el => el.addEventListener('click', () => { viewImage.src = el.dataset.url; viewModal.style.display='flex'; }));
-        document.querySelectorAll('.edit-img').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentEditImageId = btn.dataset.id;
-                editSeqNum.value = btn.dataset.seq;
-                editFamily.value = btn.dataset.family;
-                currentEditNewImageFile = null;
-                editImagePreview.style.display = 'none';
-                editModal.style.display = 'flex';
+        document.querySelectorAll('.view-img').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const seqNum = el.dataset.seq;
+                const family = el.dataset.family;
+                openImageViewer(seqNum, family);
             });
         });
-        document.querySelectorAll('.delete-img').forEach(btn => {
-            btn.addEventListener('click', async () => { if(confirm("🗑️ حذف الصورة؟")) await db.ref(`images/${btn.dataset.id}`).remove(); showToast("تم الحذف"); });
+        
+        document.querySelectorAll('.edit-product').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const seqNum = btn.dataset.seq;
+                const family = btn.dataset.family;
+                openEditModal(seqNum, family);
+            });
+        });
+        
+        document.querySelectorAll('.delete-product').forEach(btn => {
+            btn.addEventListener('click', async () => { 
+                const seqNum = btn.dataset.seq;
+                const family = btn.dataset.family;
+                if(confirm(`🗑️ حذف جميع صور المنتج "${seqNum}"؟`)) {
+                    const snap = await db.ref('images').once('value');
+                    const promises = [];
+                    snap.forEach(child => {
+                        if (child.val().seqNum === seqNum && child.val().family === family) {
+                            promises.push(db.ref(`images/${child.key}`).remove());
+                        }
+                    });
+                    await Promise.all(promises);
+                    showToast("تم الحذف");
+                }
+            });
         });
     }
     
-    // كاميرا وألبوم التعديل
-    const editCameraInput = document.createElement('input');
-    editCameraInput.type = 'file';
-    editCameraInput.accept = 'image/*';
-    editCameraInput.capture = 'environment';
-    editCameraInput.style.display = 'none';
-    document.body.appendChild(editCameraInput);
+    async function openImageViewer(seqNum, family) {
+        const snapshot = await db.ref('images').once('value');
+        const images = [];
+        snapshot.forEach(child => {
+            const img = child.val();
+            if (img.seqNum === seqNum && img.family === family) {
+                images.push({ id: child.key, url: img.url, timestamp: img.timestamp });
+            }
+        });
+        
+        images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+        currentViewerImages = images;
+        currentViewerIndex = 0;
+        
+        if (images.length > 0) {
+            updateViewerImage();
+            viewModal.style.display = 'flex';
+        }
+    }
     
-    const editGalleryInput = document.createElement('input');
-    editGalleryInput.type = 'file';
-    editGalleryInput.accept = 'image/*';
-    editGalleryInput.style.display = 'none';
-    document.body.appendChild(editGalleryInput);
+    function updateViewerImage() {
+        if (currentViewerImages.length > 0 && currentViewerIndex >= 0 && currentViewerIndex < currentViewerImages.length) {
+            viewImage.src = currentViewerImages[currentViewerIndex].url;
+            imageCounter.textContent = `${currentViewerIndex + 1} / ${currentViewerImages.length}`;
+        }
+    }
     
-    editChangeImageCameraBtn.addEventListener('click', () => {
+    function nextImage() {
+        if (currentViewerImages.length > 0 && currentViewerIndex < currentViewerImages.length - 1) {
+            currentViewerIndex++;
+            updateViewerImage();
+        } else if (currentViewerIndex === currentViewerImages.length - 1) {
+            showToast("📸 هذه آخر صورة", false);
+        }
+    }
+    
+    function prevImage() {
+        if (currentViewerIndex > 0) {
+            currentViewerIndex--;
+            updateViewerImage();
+        } else {
+            showToast("📸 هذه أول صورة", false);
+        }
+    }
+
+    // ===================== أحداث نافذة العرض =====================
+    viewModal.addEventListener('click', (e) => {
+        if (e.target === viewModal) {
+            viewModal.style.display = 'none';
+        }
+    });
+    
+    nextImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        nextImage();
+    });
+    
+    prevImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        prevImage();
+    });
+    
+    closeViewerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        viewModal.style.display = 'none';
+    });
+    
+    viewImage.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+    
+    viewImage.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    viewImage.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            nextImage();
+        }
+        if (touchEndX > touchStartX + swipeThreshold) {
+            prevImage();
+        }
+    }
+    // ============================================================
+    
+    async function openEditModal(seqNum, family) {
+        currentEditSeqNum = seqNum;
+        currentEditFamily = family;
+        currentEditNewImages = [];
+        
+        editSeqNum.value = seqNum;
+        editFamily.value = family;
+        
+        const snapshot = await db.ref('images').once('value');
+        const images = [];
+        snapshot.forEach(child => {
+            const img = child.val();
+            if (img.seqNum === seqNum && img.family === family) {
+                images.push({ id: child.key, ...img });
+            }
+        });
+        
+        currentEditExistingImages = images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+        
+        renderEditImages();
+        editPreviewArea.style.display = 'none';
+        editModal.style.display = 'flex';
+    }
+    
+    function renderEditImages() {
+        if (currentEditExistingImages.length === 0) {
+            editImagesGrid.innerHTML = '<div class="empty-msg">📭 لا توجد صور</div>';
+            return;
+        }
+        
+        let html = '';
+        currentEditExistingImages.forEach((img, idx) => {
+            html += `
+                <div class="edit-image-item">
+                    <img src="${img.url}" class="view-edit-img" data-url="${img.url}">
+                    <button class="edit-image-delete" data-id="${img.id}" data-idx="${idx}"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+        });
+        editImagesGrid.innerHTML = html;
+        
+        document.querySelectorAll('.view-edit-img').forEach(el => {
+            el.addEventListener('click', () => {
+                const seqNum = editSeqNum.value;
+                const family = editFamily.value;
+                viewModal.style.display = 'none';
+                openImageViewer(seqNum, family);
+            });
+        });
+        
+        document.querySelectorAll('.edit-image-delete').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const imgId = btn.dataset.id;
+                if (confirm("حذف هذه الصورة؟")) {
+                    await db.ref(`images/${imgId}`).remove();
+                    showToast("✅ تم حذف الصورة");
+                    openEditModal(currentEditSeqNum, currentEditFamily);
+                }
+            });
+        });
+    }
+    
+    function addEditImageToPending(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            currentEditNewImages.push({ file, previewUrl: event.target.result });
+            updateEditPreviewArea();
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function updateEditPreviewArea() {
+        if (currentEditNewImages.length === 0) {
+            editPreviewArea.style.display = 'none';
+            return;
+        }
+        editPreviewArea.style.display = 'block';
+        let html = '';
+        currentEditNewImages.forEach((img, index) => {
+            html += `
+                <div class="preview-item">
+                    <img src="${img.previewUrl}" alt="معاينة">
+                    <button class="preview-remove" data-index="${index}"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+        });
+        editPreviewGrid.innerHTML = html;
+        
+        document.querySelectorAll('#editPreviewGrid .preview-remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.index);
+                currentEditNewImages.splice(idx, 1);
+                updateEditPreviewArea();
+            });
+        });
+    }
+    
+    editCameraBtn.addEventListener('click', () => {
         editCameraInput.value = '';
         editCameraInput.click();
     });
-    editChangeImageGalleryBtn.addEventListener('click', () => {
+    editGalleryBtn.addEventListener('click', () => {
         editGalleryInput.value = '';
         editGalleryInput.click();
     });
     
-    function handleEditImageFile(file) {
-        if (file) {
-            currentEditNewImageFile = file;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                editImagePreviewImg.src = event.target.result;
-                editImagePreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-            showToast("📸 تم اختيار صورة جديدة");
-        }
-    }
-    
     editCameraInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) handleEditImageFile(e.target.files[0]);
+        if (e.target.files.length > 0) addEditImageToPending(e.target.files[0]);
     });
     editGalleryInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) handleEditImageFile(e.target.files[0]);
+        if (e.target.files.length > 0) addEditImageToPending(e.target.files[0]);
     });
     
     saveEditBtn.addEventListener('click', async () => {
-        if (!currentEditImageId) return;
+        if (!currentEditSeqNum) return;
         const newSeq = editSeqNum.value.trim();
         const newFamily = editFamily.value;
         if (!newSeq || !newFamily) { showToast("❌ املأ الحقول", true); return; }
+        
         try {
-            let updateData = { seqNum: newSeq, family: newFamily };
-            if (currentEditNewImageFile) {
-                showToast("⏳ جاري رفع الصورة...");
-                const newUrl = await uploadToImgbb(currentEditNewImageFile);
-                updateData.url = newUrl;
+            for (let img of currentEditExistingImages) {
+                await db.ref(`images/${img.id}`).update({
+                    seqNum: newSeq,
+                    family: newFamily
+                });
             }
-            await db.ref(`images/${currentEditImageId}`).update(updateData);
-            showToast("✅ تم التحديث");
+            
+            if (currentEditNewImages.length > 0) {
+                showToast(`⏳ جاري رفع ${currentEditNewImages.length} صور جديدة...`);
+                const groupId = Date.now().toString();
+                for (let i = 0; i < currentEditNewImages.length; i++) {
+                    const url = await uploadToImgbb(currentEditNewImages[i].file);
+                    await db.ref(`images/${groupId}_img_${i}`).set({
+                        url: url,
+                        seqNum: newSeq,
+                        family: newFamily,
+                        groupId: groupId,
+                        timestamp: Date.now() + i
+                    });
+                }
+            }
+            
+            showToast("✅ تم حفظ التغييرات");
             editModal.style.display = 'none';
-            currentEditNewImageFile = null;
-            editImagePreview.style.display = 'none';
-        } catch(err) { showToast("❌ خطأ: "+err.message, true); }
+            currentEditNewImages = [];
+        } catch(err) { 
+            showToast("❌ خطأ: "+err.message, true); 
+        }
     });
     
-    closeModalBtn.addEventListener('click', () => { editModal.style.display='none'; currentEditNewImageFile = null; });
-    viewModal.addEventListener('click', () => viewModal.style.display='none');
-    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+    closeModalBtn.addEventListener('click', () => { 
+        editModal.style.display='none'; 
+        currentEditNewImages = [];
+    });
+    
+    function escapeHtml(str) { 
+        return String(str || '').replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); 
+    }
 
-    // قابلة للطي
+    searchInput.addEventListener('input', (e) => {
+        currentSearchTerm = e.target.value;
+        displayImages();
+    });
+
     familiesToggle.addEventListener('click', () => {
         familiesCollapsible.classList.toggle('show');
         toggleArrow.classList.toggle('rotated');
@@ -866,6 +1355,8 @@
 
     loadFamilies();
     loadImages();
+    
+    showToast("✅ النظام جاهز");
 </script>
 </body>
 </html>
