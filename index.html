@@ -27,7 +27,6 @@
             min-height: 100vh;
         }
 
-        /* ========== شريط علوي احترافي مع الصورة ========== */
         .hero-header {
             background: white;
             padding: 16px 20px 12px;
@@ -70,11 +69,7 @@
             align-items: center;
             gap: 6px;
         }
-        .store-badge i {
-            font-size: 0.7rem;
-        }
 
-        /* حاوية */
         .container {
             width: 100%;
             max-width: 100%;
@@ -82,7 +77,6 @@
             padding: 16px;
         }
 
-        /* أزرار العائلات - تصميم أنيق */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -107,20 +101,13 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             color: #475569;
         }
-        .filter-btn i {
-            font-size: 0.85rem;
-        }
         .filter-btn.active {
             background: linear-gradient(135deg, #1877f2, #4f8cff);
             color: white;
             box-shadow: 0 4px 12px rgba(24,119,242,0.3);
             transform: translateY(-1px);
         }
-        .filter-btn:active {
-            transform: scale(0.96);
-        }
 
-        /* شبكة الصور - 2 في الهاتف */
         .images-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -138,9 +125,6 @@
         .image-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-        }
-        .image-card:active {
-            transform: scale(0.98);
         }
         .image-card img {
             width: 100%;
@@ -171,8 +155,13 @@
             font-weight: 600;
             color: #64748b;
         }
+        .photos-count {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 4px;
+            text-align: center;
+        }
 
-        /* ========== ترقيم الصفحات - أزرار دائرية أنيقة في الأسفل فقط ========== */
         .pagination {
             display: flex;
             justify-content: center;
@@ -197,65 +186,137 @@
             align-items: center;
             justify-content: center;
         }
-        .page-btn i {
-            font-size: 0.9rem;
-        }
-        .page-btn:hover:not(.disabled) {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #1877f2, #4f8cff);
-            color: white;
-            box-shadow: 0 6px 14px rgba(24,119,242,0.3);
-        }
-        .page-btn:active {
-            transform: scale(0.94);
-        }
         .page-btn.active {
             background: linear-gradient(135deg, #1877f2, #4f8cff);
             color: white;
-            box-shadow: 0 4px 12px rgba(24,119,242,0.4);
         }
         .page-btn.disabled {
             opacity: 0.4;
             cursor: not-allowed;
-            transform: none;
         }
         .page-dots {
             padding: 0 6px;
             font-size: 1rem;
             color: #94a3b8;
-            letter-spacing: 2px;
         }
 
-        /* مودال تكبير الصورة */
-        .modal {
+        .gallery-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
             align-items: center;
-            z-index: 1001;
+            z-index: 2000;
             cursor: pointer;
-            backdrop-filter: blur(8px);
         }
-        .modal-content {
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .gallery-image-container {
             max-width: 90%;
-            max-height: 90%;
+            max-height: 85vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .modal-content img {
-            width: auto;
+        #galleryImage {
             max-width: 100%;
-            max-height: 90vh;
-            border-radius: 20px;
-            display: block;
-            margin: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .gallery-nav:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .gallery-nav.prev { left: 20px; }
+        .gallery-nav.next { right: 20px; }
+        .gallery-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .gallery-close:hover {
+            background: rgba(0,0,0,0.7);
+            transform: scale(1.05);
+        }
+        .gallery-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 50px;
+        }
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .gallery-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+        @media (max-width: 768px) {
+            .gallery-nav { width: 40px; height: 40px; font-size: 1rem; }
+            .gallery-nav.prev { left: 10px; }
+            .gallery-nav.next { right: 10px; }
+            .gallery-dots { bottom: 20px; gap: 10px; padding: 6px 14px; }
+            .gallery-dot { width: 8px; height: 8px; }
+            .gallery-close { top: 15px; right: 15px; width: 38px; height: 38px; }
         }
 
-        /* رسائل */
         .empty-msg {
             text-align: center;
             padding: 60px 20px;
@@ -282,34 +343,13 @@
             margin-top: 20px;
         }
 
-        /* للشاشات الأكبر */
-        @media (min-width: 600px) {
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
-        @media (min-width: 768px) {
-            .container {
-                max-width: 750px;
-            }
-            .images-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        @media (min-width: 1024px) {
-            .container {
-                max-width: 1000px;
-            }
-            .images-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
+        @media (min-width: 600px) { .container { max-width: 600px; margin: 0 auto; } }
+        @media (min-width: 768px) { .container { max-width: 750px; } .images-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .container { max-width: 1000px; } .images-grid { grid-template-columns: repeat(4, 1fr); } }
     </style>
 </head>
 <body>
 
-<!-- شريط علوي احترافي مع الصورة -->
 <div class="hero-header">
     <div class="top-bar">
         <div class="logo-area">
@@ -324,17 +364,14 @@
 </div>
 
 <div class="container">
-    <!-- أزرار العائلات -->
     <div id="filterBar" class="filter-bar">
         <button class="filter-btn active" data-family="الكل"><i class="fas fa-star"></i> الكل</button>
     </div>
 
-    <!-- شبكة الصور -->
     <div id="imagesGrid" class="images-grid">
         <div class="loading"><i class="fas fa-spinner fa-pulse"></i> جاري التحميل...</div>
     </div>
 
-    <!-- ترقيم الصفحات - يظهر دائماً في الأسفل -->
     <div id="pagination" class="pagination"></div>
 </div>
 
@@ -342,10 +379,15 @@
     <i class="fas fa-camera"></i> Bébé kids DZ &copy; 2026 – جميع الحقوق محفوظة
 </footer>
 
-<!-- مودال تكبير الصورة -->
-<div id="viewModal" class="modal">
-    <div class="modal-content">
-        <img id="viewImage" src="" alt="صورة مكبرة">
+<div id="galleryModal" class="gallery-modal" onclick="closeGallery()">
+    <div class="gallery-container">
+        <button class="gallery-nav prev" id="prevBtn" onclick="event.stopPropagation(); prevImage()"><i class="fas fa-chevron-right"></i></button>
+        <div class="gallery-image-container">
+            <img id="galleryImage" src="" alt="صورة مكبرة">
+        </div>
+        <button class="gallery-nav next" id="nextBtn" onclick="event.stopPropagation(); nextImage()"><i class="fas fa-chevron-left"></i></button>
+        <div class="gallery-dots" id="galleryDots"></div>
+        <button class="gallery-close" onclick="closeGallery()"><i class="fas fa-times"></i></button>
     </div>
 </div>
 
@@ -363,27 +405,124 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let allImages = [];
+    let allGroups = [];
     let familiesList = [];
     let currentFilter = "الكل";
     let currentPage = 1;
-    const IMAGES_PER_PAGE = 20;
+    const ITEMS_PER_PAGE = 20;
 
-    // عناصر DOM
+    let currentGalleryImages = [];
+    let currentGalleryIndex = 0;
+    let touchStartX = 0;
+
     const filterBar = document.getElementById('filterBar');
     const imagesGrid = document.getElementById('imagesGrid');
     const paginationDiv = document.getElementById('pagination');
-    const viewModal = document.getElementById('viewModal');
-    const viewImage = document.getElementById('viewImage');
+    const galleryModal = document.getElementById('galleryModal');
+    const galleryImage = document.getElementById('galleryImage');
+    const galleryDots = document.getElementById('galleryDots');
 
-    // إغلاق المودال
-    viewModal.addEventListener('click', (e) => {
-        if (e.target === viewModal) {
-            viewModal.style.display = 'none';
+    function groupImages(images) {
+        const groups = new Map();
+        images.forEach(img => {
+            const key = `${img.seqNum}_${img.family}`;
+            if (!groups.has(key)) {
+                groups.set(key, {
+                    seqNum: img.seqNum,
+                    family: img.family,
+                    images: [],
+                    groupId: img.groupId || img.id,
+                    mainImage: img.url,
+                    imageCount: 0
+                });
+            }
+            groups.get(key).images.push({ url: img.url, timestamp: img.timestamp });
+            groups.get(key).imageCount = groups.get(key).images.length;
+        });
+        
+        for (let group of groups.values()) {
+            group.images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+            group.mainImage = group.images[0]?.url || '';
+        }
+        
+        return Array.from(groups.values());
+    }
+
+    function openGallery(imagesArray, startIndex = 0) {
+        if (!imagesArray || imagesArray.length === 0) return;
+        currentGalleryImages = imagesArray;
+        currentGalleryIndex = startIndex;
+        updateGalleryImage();
+        updateGalleryDots();
+        galleryModal.style.display = 'flex';
+    }
+
+    function updateGalleryImage() {
+        if (currentGalleryImages.length > 0 && currentGalleryIndex >= 0 && currentGalleryIndex < currentGalleryImages.length) {
+            galleryImage.src = currentGalleryImages[currentGalleryIndex].url;
+        }
+    }
+
+    function updateGalleryDots() {
+        let dotsHtml = '';
+        for (let i = 0; i < currentGalleryImages.length; i++) {
+            dotsHtml += `<div class="gallery-dot ${i === currentGalleryIndex ? 'active' : ''}" onclick="event.stopPropagation(); goToImage(${i})"></div>`;
+        }
+        galleryDots.innerHTML = dotsHtml;
+    }
+
+    window.nextImage = function() {
+        if (currentGalleryIndex < currentGalleryImages.length - 1) {
+            currentGalleryIndex++;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.prevImage = function() {
+        if (currentGalleryIndex > 0) {
+            currentGalleryIndex--;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.goToImage = function(index) {
+        if (index >= 0 && index < currentGalleryImages.length) {
+            currentGalleryIndex = index;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.closeGallery = function() {
+        galleryModal.style.display = 'none';
+    }
+
+    // ========== السحب باللمس على النافذة بأكملها (يعمل 100%) ==========
+    let touchStartXGlobal = 0;
+    let touchEndXGlobal = 0;
+    
+    galleryModal.addEventListener('touchstart', (e) => {
+        touchStartXGlobal = e.touches[0].clientX;
+    });
+    
+    galleryModal.addEventListener('touchend', (e) => {
+        touchEndXGlobal = e.changedTouches[0].clientX;
+        const swipeDistance = touchEndXGlobal - touchStartXGlobal;
+        const threshold = 50;
+        
+        if (Math.abs(swipeDistance) > threshold) {
+            if (swipeDistance > 0) {
+                // سحب لليمين ← الصورة السابقة
+                prevImage();
+            } else {
+                // سحب لليسار ← الصورة التالية
+                nextImage();
+            }
         }
     });
 
-    // تحميل العائلات
     function loadFamilies() {
         db.ref('families').on('value', (snapshot) => {
             const data = snapshot.val() || {};
@@ -392,7 +531,6 @@
         });
     }
 
-    // أزرار الفلترة
     function renderFilterButtons() {
         let html = `<button class="filter-btn ${currentFilter === 'الكل' ? 'active' : ''}" data-family="الكل"><i class="fas fa-star"></i> الكل</button>`;
         familiesList.forEach(family => {
@@ -405,66 +543,68 @@
                 currentFilter = btn.getAttribute('data-family');
                 currentPage = 1;
                 renderFilterButtons();
-                displayImages();
+                displayGroups();
                 renderPagination();
             });
         });
     }
 
-    // تحميل الصور
     function loadImages() {
         db.ref('images').on('value', (snapshot) => {
             const images = snapshot.val();
-            allImages = [];
+            const allImagesArray = [];
             if (images) {
-                allImages = Object.entries(images).map(([id, data]) => ({
-                    id: id,
-                    url: data.url,
-                    seqNum: data.seqNum,
-                    family: data.family,
-                    timestamp: data.timestamp || 0
-                }));
-                // ترتيب حسب الرقم التسلسلي
-                allImages.sort((a, b) => {
-                    const numA = parseInt(a.seqNum);
-                    const numB = parseInt(b.seqNum);
-                    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-                    return String(a.seqNum).localeCompare(String(b.seqNum));
+                Object.entries(images).forEach(([id, data]) => {
+                    allImagesArray.push({
+                        id: id,
+                        url: data.url,
+                        seqNum: data.seqNum,
+                        family: data.family,
+                        timestamp: data.timestamp || 0
+                    });
                 });
             }
-            displayImages();
+            allGroups = groupImages(allImagesArray);
+            allGroups.sort((a, b) => {
+                const numA = parseInt(a.seqNum);
+                const numB = parseInt(b.seqNum);
+                if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                return String(a.seqNum).localeCompare(String(b.seqNum));
+            });
+            displayGroups();
             renderPagination();
         });
     }
 
-    // الصور المفلترة
-    function getFilteredImages() {
-        if (currentFilter === "الكل") return allImages;
-        return allImages.filter(img => img.family === currentFilter);
+    function getFilteredGroups() {
+        if (currentFilter === "الكل") return allGroups;
+        return allGroups.filter(group => group.family === currentFilter);
     }
 
-    // عرض الصور
-    function displayImages() {
-        const filtered = getFilteredImages();
-        const totalImages = filtered.length;
+    function displayGroups() {
+        const filtered = getFilteredGroups();
+        const totalItems = filtered.length;
         
-        if (totalImages === 0) {
-            imagesGrid.innerHTML = '<div class="empty-msg"><i class="fas fa-folder-open"></i> لا توجد صور في هذه العائلة</div>';
+        if (totalItems === 0) {
+            imagesGrid.innerHTML = '<div class="empty-msg"><i class="fas fa-folder-open"></i> لا توجد منتجات في هذه العائلة</div>';
             return;
         }
 
-        const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
-        const endIndex = Math.min(startIndex + IMAGES_PER_PAGE, totalImages);
-        const pageImages = filtered.slice(startIndex, endIndex);
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+        const pageGroups = filtered.slice(startIndex, endIndex);
 
         let html = '';
-        for (let img of pageImages) {
+        for (let group of pageGroups) {
             html += `
-                <div class="image-card" data-url="${img.url}">
-                    <img src="${img.url}" alt="صورة" loading="lazy">
+                <div class="image-card" data-seq="${escapeHtml(group.seqNum)}" data-family="${escapeHtml(group.family)}">
+                    <img src="${group.mainImage}" alt="صورة" loading="lazy">
                     <div class="image-info">
-                        <span class="seq-badge"><i class="fas fa-hashtag"></i> ${escapeHtml(img.seqNum)}</span>
-                        <span class="family-badge"><i class="fas fa-users"></i> ${escapeHtml(img.family)}</span>
+                        <div>
+                            <span class="seq-badge"><i class="fas fa-hashtag"></i> ${escapeHtml(group.seqNum)}</span>
+                            <div class="photos-count"><i class="fas fa-images"></i> ${group.imageCount} صورة</div>
+                        </div>
+                        <span class="family-badge"><i class="fas fa-users"></i> ${escapeHtml(group.family)}</span>
                     </div>
                 </div>
             `;
@@ -473,41 +613,35 @@
 
         document.querySelectorAll('.image-card').forEach(card => {
             card.addEventListener('click', () => {
-                viewImage.src = card.getAttribute('data-url');
-                viewModal.style.display = 'flex';
+                const seqNum = card.getAttribute('data-seq');
+                const family = card.getAttribute('data-family');
+                const group = allGroups.find(g => g.seqNum === seqNum && g.family === family);
+                if (group && group.images.length > 0) {
+                    openGallery(group.images);
+                }
             });
         });
     }
 
-    // إنشاء أرقام الصفحات الذكية
     function generatePageNumbers(totalPages) {
         if (totalPages <= 1) return [1];
-        
         let pages = [];
-        
         if (totalPages <= 7) {
             for (let i = 1; i <= totalPages; i++) pages.push(i);
-        } 
-        else {
+        } else {
             pages.push(1, 2, 3);
-            
             if (currentPage > 4 && currentPage < totalPages - 3) {
                 pages.push('...');
                 pages.push(currentPage - 1, currentPage, currentPage + 1);
                 pages.push('...');
                 pages.push(totalPages - 2, totalPages - 1, totalPages);
-            }
-            else if (currentPage <= 4) {
+            } else if (currentPage <= 4) {
                 pages.push(4, 5, '...');
                 pages.push(totalPages - 2, totalPages - 1, totalPages);
-            }
-            else if (currentPage >= totalPages - 3) {
+            } else if (currentPage >= totalPages - 3) {
                 pages.push('...');
                 for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
             }
-            
-            pages = [...new Set(pages)];
-            
             const cleaned = [];
             let lastWasDot = false;
             for (let p of pages) {
@@ -521,26 +655,24 @@
             }
             pages = cleaned;
         }
-        
         return pages;
     }
 
-    // عرض الترقيم في الأسفل (يظهر دائماً)
     function renderPagination() {
-        const filtered = getFilteredImages();
-        const totalImages = filtered.length;
-        const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
+        const filtered = getFilteredGroups();
+        const totalItems = filtered.length;
+        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+        
+        if (totalPages <= 1) {
+            paginationDiv.innerHTML = '';
+            return;
+        }
         
         const pages = generatePageNumbers(totalPages);
-        
         const prevDisabled = currentPage === 1;
         const nextDisabled = currentPage === totalPages;
         
-        let html = `
-            <button class="page-btn ${prevDisabled ? 'disabled' : ''}" data-page="prev" ${prevDisabled ? 'disabled' : ''}>
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        `;
+        let html = `<button class="page-btn ${prevDisabled ? 'disabled' : ''}" data-page="prev" ${prevDisabled ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
         
         for (let p of pages) {
             if (p === '...') {
@@ -550,28 +682,21 @@
             }
         }
         
-        html += `
-            <button class="page-btn ${nextDisabled ? 'disabled' : ''}" data-page="next" ${nextDisabled ? 'disabled' : ''}>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-        `;
+        html += `<button class="page-btn ${nextDisabled ? 'disabled' : ''}" data-page="next" ${nextDisabled ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
         
         paginationDiv.innerHTML = html;
         
-        // إضافة الأحداث
         document.querySelectorAll('#pagination .page-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (btn.classList.contains('disabled')) return;
                 const action = btn.getAttribute('data-page');
                 let newPage = currentPage;
-                
                 if (action === 'prev' && currentPage > 1) newPage = currentPage - 1;
                 else if (action === 'next' && currentPage < totalPages) newPage = currentPage + 1;
                 else if (!isNaN(parseInt(action))) newPage = parseInt(action);
-                
                 if (newPage !== currentPage) {
                     currentPage = newPage;
-                    displayImages();
+                    displayGroups();
                     renderPagination();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
