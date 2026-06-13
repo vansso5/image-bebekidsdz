@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>لوحة الإدارة | معرض الصور</title>
+    <title>Bébé kids DZ | معرض الصور</title>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,699 +20,376 @@
         }
 
         body {
-            background: #f0f2f5;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             padding: 0;
             margin: 0;
             min-height: 100vh;
         }
 
-        .top-bar {
+        .hero-header {
             background: white;
-            padding: 12px 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 16px 20px 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            margin-bottom: 12px;
         }
-        .logo {
+        .logo-area {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
-        .logo i {
-            font-size: 1.5rem;
-            color: #1b74e4;
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
-        .logo span {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #1b74e4;
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #1877f2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
-        .badge {
-            background: #e4e6eb;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
+        .store-badge {
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .container {
             width: 100%;
             max-width: 100%;
             margin: 0 auto;
-            padding: 12px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-        .card-header {
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-bottom: 1px solid #e4e6eb;
-        }
-        .card-header i {
-            font-size: 1.1rem;
-            color: #1b74e4;
-        }
-        .card-body {
             padding: 16px;
-        }
-
-        .camera-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .cam-btn {
-            flex: 1;
-            background: #e4e6eb;
-            border: none;
-            padding: 14px 8px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-        .cam-btn:active {
-            transform: scale(0.97);
-            background: #d1d5db;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #ccd0d5;
-            font-size: 0.9rem;
-            background: white;
-            margin-bottom: 12px;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #1b74e4;
-        }
-
-        .btn-primary {
-            background: #1b74e4;
-            color: white;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-primary:active {
-            background: #166fe5;
-        }
-
-        .btn-secondary {
-            background: #e4e6eb;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .btn-icon {
-            background: transparent;
-            padding: 8px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-icon:active {
-            background: #e4e6eb;
         }
 
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 24px;
             padding: 0 4px;
+            justify-content: center;
         }
         .filter-btn {
-            background: #e4e6eb;
+            background: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s ease;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            color: #475569;
         }
         .filter-btn.active {
-            background: #1b74e4;
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
             color: white;
-        }
-
-        .families-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            cursor: pointer;
-        }
-        .toggle-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-        .toggle-arrow {
-            transition: transform 0.2s;
-            font-size: 0.8rem;
-        }
-        .toggle-arrow.rotated {
-            transform: rotate(180deg);
-        }
-        .families-collapsible {
-            display: none;
-            padding: 0 16px 16px 16px;
-        }
-        .families-collapsible.show {
-            display: block;
-        }
-        .families-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .family-item {
-            background: #f0f2f5;
-            padding: 6px 12px 6px 8px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-        }
-
-        .preview-area {
-            margin-top: 12px;
-            margin-bottom: 12px;
-        }
-        .preview-title {
-            font-size: 0.75rem;
-            color: #65676b;
-            margin-bottom: 8px;
-        }
-        .preview-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .preview-item {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #1b74e4;
-        }
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .preview-remove {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e41e3f;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            cursor: pointer;
-            border: none;
-        }
-        .add-more-btn {
-            background: #e4e6eb;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            width: 100%;
-            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+            transform: translateY(-1px);
         }
 
         .images-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 16px;
         }
         .image-card {
             background: white;
-            border-radius: 14px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-            border: 1px solid #e4e6eb;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
         }
         .image-card img {
             width: 100%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
-            cursor: pointer;
         }
         .image-info {
-            padding: 8px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 4px;
-            border-top: 1px solid #e4e6eb;
+            border-top: 1px solid #eef2ff;
+            background: #ffffff;
         }
         .seq-badge {
-            background: #e7f3ff;
-            padding: 4px 6px;
-            border-radius: 16px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #1b74e4;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 85px;
+            background: linear-gradient(135deg, #e7f3ff, #d4e6ff);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #1877f2;
         }
-        .image-actions {
-            display: flex;
-            gap: 2px;
+        .family-badge {
+            background: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
         }
         .photos-count {
-            font-size: 0.6rem;
-            color: #65676b;
+            font-size: 0.65rem;
+            color: #64748b;
             margin-top: 4px;
             text-align: center;
         }
 
-        .empty-msg {
-            text-align: center;
-            padding: 40px;
-            color: #65676b;
-            grid-column: 1/-1;
-            font-size: 0.85rem;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 40px 0 20px;
+            flex-wrap: wrap;
         }
-        .toast-msg {
-            position: fixed;
-            bottom: 20px;
-            left: 16px;
-            right: 16px;
-            background: #050505;
+        .page-btn {
+            min-width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 14px;
+            background: white;
+            color: #1877f2;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-btn.active {
+            background: linear-gradient(135deg, #1877f2, #4f8cff);
             color: white;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            z-index: 1000;
-            display: none;
-            text-align: center;
+        }
+        .page-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .page-dots {
+            padding: 0 6px;
+            font-size: 1rem;
+            color: #94a3b8;
         }
 
-        .modal {
+        .gallery-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
             align-items: center;
-            z-index: 1001;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-content h3 {
-            margin-bottom: 14px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .modal-content input, .modal-content select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccd0d5;
-            margin: 6px 0;
-            font-size: 0.85rem;
-        }
-        .flex-btns {
-            display: flex;
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .flex-btns button {
-            flex: 1;
-        }
-        .change-img-btn {
-            background: #e4e6eb;
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            margin: 6px 0;
+            z-index: 2000;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
-        hr {
-            margin: 10px 0;
-            border: none;
-            border-top: 1px solid #e4e6eb;
-        }
-
-        .edit-images-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .edit-image-item {
+        .gallery-container {
             position: relative;
-            aspect-ratio: 1 / 1;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #e4e6eb;
-        }
-        .edit-image-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-        }
-        .edit-image-delete {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(228,30,63,0.9);
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            border: none;
-            font-size: 11px;
+            align-items: center;
         }
-
-        .hidden-input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .gallery-image-container {
+            max-width: 90%;
+            max-height: 85vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #galleryImage {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             pointer-events: none;
         }
-
-        .search-box {
-            margin-bottom: 16px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 30px;
-            border: 1px solid #ccd0d5;
-            font-size: 0.9rem;
-            background: white;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: #1b74e4;
-        }
-
-        .viewer-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .viewer-image {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        .nav-btn {
+        .gallery-nav {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
             border: none;
-            width: 45px;
-            height: 45px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1.3rem;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: 0.2s;
             z-index: 10;
         }
-        .nav-btn:hover {
-            background: rgba(0,0,0,0.8);
+        .gallery-nav:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-50%) scale(1.05);
         }
-        .nav-prev {
-            left: 20px;
-        }
-        .nav-next {
-            right: 20px;
-        }
-        .close-viewer {
+        .gallery-nav.prev { left: 20px; }
+        .gallery-nav.next { right: 20px; }
+        .gallery-close {
             position: absolute;
             top: 20px;
             right: 20px;
             background: rgba(0,0,0,0.5);
-            color: white;
+            backdrop-filter: blur(8px);
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
             z-index: 10;
         }
-        .image-counter {
+        .gallery-close:hover {
+            background: rgba(0,0,0,0.7);
+            transform: scale(1.05);
+        }
+        .gallery-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            display: flex;
+            gap: 12px;
             z-index: 10;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 50px;
+        }
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .gallery-dot.active {
+            background: white;
+            transform: scale(1.2);
         }
         @media (max-width: 768px) {
-            .nav-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
-            }
-            .nav-prev { left: 10px; }
-            .nav-next { right: 10px; }
+            .gallery-nav { width: 40px; height: 40px; font-size: 1rem; }
+            .gallery-nav.prev { left: 10px; }
+            .gallery-nav.next { right: 10px; }
+            .gallery-dots { bottom: 20px; gap: 10px; padding: 6px 14px; }
+            .gallery-dot { width: 8px; height: 8px; }
+            .gallery-close { top: 15px; right: 15px; width: 38px; height: 38px; }
         }
 
-        @media (min-width: 600px) {
-            .container { max-width: 600px; margin: 0 auto; }
+        .empty-msg {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            grid-column: 1/-1;
+            font-size: 0.95rem;
+            background: white;
+            border-radius: 24px;
+            margin: 20px;
         }
-        @media (min-width: 768px) {
-            .container { max-width: 750px; }
-            .images-grid { grid-template-columns: repeat(3, 1fr); }
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #1877f2;
+            grid-column: 1/-1;
+            font-size: 1rem;
         }
-        @media (min-width: 1024px) {
-            .container { max-width: 1000px; }
-            .images-grid { grid-template-columns: repeat(4, 1fr); }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
         }
+
+        @media (min-width: 600px) { .container { max-width: 600px; margin: 0 auto; } }
+        @media (min-width: 768px) { .container { max-width: 750px; } .images-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .container { max-width: 1000px; } .images-grid { grid-template-columns: repeat(4, 1fr); } }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <div class="logo">
-        <i class="fas fa-camera"></i>
-        <span>معرض الصور</span>
-        <div class="badge"><i class="fas fa-user-shield"></i> إدارة</div>
+<div class="hero-header">
+    <div class="top-bar">
+        <div class="logo-area">
+            <img class="logo-img" src="https://i.postimg.cc/hPVDdvy0/1000021497-removebg-preview.png" alt="Bébé kids DZ">
+            <span class="logo-text">Bébé kids DZ</span>
+        </div>
+        <div class="store-badge">
+            <i class="fas fa-crown"></i>
+            <span>معرض الصور</span>
+        </div>
     </div>
-    <div><i class="fas fa-database"></i></div>
 </div>
 
 <div class="container">
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden-input">
-    <input type="file" id="galleryInput" accept="image/*" class="hidden-input">
-    <input type="file" id="editCameraInput" accept="image/*" capture="environment" class="hidden-input">
-    <input type="file" id="editGalleryInput" accept="image/*" class="hidden-input">
-
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-plus-circle"></i>
-            <span>إضافة منتج جديد</span>
-        </div>
-        <div class="card-body">
-            <div class="camera-row">
-                <button id="cameraBtn" class="cam-btn"><i class="fas fa-camera"></i> كاميرا</button>
-                <button id="galleryBtn" class="cam-btn"><i class="fas fa-images"></i> الألبوم</button>
-            </div>
-            <input type="text" id="seqNum" class="input-field" placeholder="🔢 الرقم التسلسلي (مثال: A12, #5, 01-23)">
-            <select id="familySelect" class="input-field">
-                <option value="" disabled selected>-- اختر عائلة --</option>
-            </select>
-            
-            <div id="previewArea" class="preview-area" style="display:none;">
-                <div class="preview-title">📸 الصور المرفوعة:</div>
-                <div id="previewGrid" class="preview-grid"></div>
-                <button id="addMoreImagesBtn" class="add-more-btn">
-                    <i class="fas fa-plus-circle"></i> إضافة صورة أخرى
-                </button>
-            </div>
-            
-            <button id="submitImageBtn" class="btn-primary"><i class="fas fa-cloud-upload-alt"></i> حفظ جميع الصور</button>
-        </div>
+    <div id="filterBar" class="filter-bar">
+        <button class="filter-btn active" data-family="الكل"><i class="fas fa-star"></i> الكل</button>
     </div>
 
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-filter"></i>
-            <span>تصفية حسب العائلة</span>
-        </div>
-        <div class="card-body">
-            <div id="filterBar" class="filter-bar">
-                <button class="filter-btn active" data-family="الكل">🌟 الكل</button>
-            </div>
-        </div>
+    <div id="imagesGrid" class="images-grid">
+        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> جاري التحميل...</div>
     </div>
 
-    <div class="card">
-        <div class="families-toggle" id="familiesToggle">
-            <div class="toggle-title">
-                <i class="fas fa-users"></i>
-                <span>إدارة العائلات</span>
-            </div>
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button id="addFamilyBtn" class="btn-secondary" style="padding:5px 10px"><i class="fas fa-plus"></i> جديد</button>
-                <i class="fas fa-chevron-down toggle-arrow" id="toggleArrow"></i>
-            </div>
-        </div>
-        <div class="families-collapsible" id="familiesCollapsible">
-            <div id="familiesList" class="families-list">⏳ جاري التحميل...</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-search"></i>
-            <span>بحث</span>
-        </div>
-        <div class="card-body">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 بحث بالرقم التسلسلي أو اسم العائلة...">
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-th-large"></i>
-            <span>المنتجات</span>
-        </div>
-        <div class="card-body">
-            <div id="imagesList" class="images-grid">⏳ جاري التحميل...</div>
-        </div>
-    </div>
+    <div id="pagination" class="pagination"></div>
 </div>
 
-<div id="editModal" class="modal" style="background:rgba(0,0,0,0.5);">
-    <div class="modal-content">
-        <h3><i class="fas fa-edit"></i> تعديل المنتج</h3>
-        <input type="text" id="editSeqNum" placeholder="الرقم التسلسلي">
-        <select id="editFamily"></select>
-        
-        <div id="editImagesContainer" style="margin: 12px 0;">
-            <div class="preview-title">📸 صور المنتج:</div>
-            <div id="editImagesGrid" class="edit-images-grid"></div>
+<footer>
+    <i class="fas fa-camera"></i> Bébé kids DZ &copy; 2026 – جميع الحقوق محفوظة
+</footer>
+
+<div id="galleryModal" class="gallery-modal" onclick="closeGallery()">
+    <div class="gallery-container">
+        <button class="gallery-nav prev" id="prevBtn" onclick="event.stopPropagation(); prevImage()"><i class="fas fa-chevron-right"></i></button>
+        <div class="gallery-image-container">
+            <img id="galleryImage" src="" alt="صورة مكبرة">
         </div>
-        
-        <div style="display: flex; gap: 8px; margin: 10px 0;">
-            <button id="editCameraBtn" class="change-img-btn" style="flex:1"><i class="fas fa-camera"></i> إضافة صورة</button>
-            <button id="editGalleryBtn" class="change-img-btn" style="flex:1"><i class="fas fa-images"></i> من الألبوم</button>
-        </div>
-        
-        <div id="editPreviewArea" class="preview-area" style="display:none;">
-            <div class="preview-title">➕ صور جديدة:</div>
-            <div id="editPreviewGrid" class="preview-grid"></div>
-        </div>
-        
-        <div class="flex-btns">
-            <button id="saveEditBtn" class="btn-primary">💾 حفظ التغييرات</button>
-            <button id="closeModalBtn" class="btn-secondary">إلغاء</button>
-        </div>
+        <button class="gallery-nav next" id="nextBtn" onclick="event.stopPropagation(); nextImage()"><i class="fas fa-chevron-left"></i></button>
+        <div class="gallery-dots" id="galleryDots"></div>
+        <button class="gallery-close" onclick="closeGallery()"><i class="fas fa-times"></i></button>
     </div>
 </div>
-
-<div id="viewModal" class="modal">
-    <div class="viewer-container">
-        <button class="close-viewer" id="closeViewerBtn"><i class="fas fa-times"></i></button>
-        <button class="nav-btn nav-prev" id="prevImageBtn"><i class="fas fa-chevron-right"></i></button>
-        <button class="nav-btn nav-next" id="nextImageBtn"><i class="fas fa-chevron-left"></i></button>
-        <img id="viewImage" class="viewer-image" src="">
-        <div class="image-counter" id="imageCounter"></div>
-    </div>
-</div>
-
-<div id="toast" class="toast-msg"></div>
 
 <script>
     const firebaseConfig = {
@@ -726,266 +404,23 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const IMGBB_API_KEY = "c1e6129bab357e6d2a74b4b9138cbd21";
 
-    let currentEditSeqNum = null;
-    let currentEditFamily = null;
-    let currentEditExistingImages = [];
-    let currentEditNewImages = [];
+    let allGroups = [];
     let familiesList = [];
-    let allImages = [];
     let currentFilter = "الكل";
-    let currentSearchTerm = "";
-    let pendingImages = [];
-    
-    let currentViewerImages = [];
-    let currentViewerIndex = 0;
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 20;
+
+    let currentGalleryImages = [];
+    let currentGalleryIndex = 0;
     let touchStartX = 0;
-    let touchEndX = 0;
 
-    // عناصر
-    const cameraBtn = document.getElementById('cameraBtn');
-    const galleryBtn = document.getElementById('galleryBtn');
-    const cameraInput = document.getElementById('cameraInput');
-    const galleryInput = document.getElementById('galleryInput');
-    const seqNumInput = document.getElementById('seqNum');
-    const familySelect = document.getElementById('familySelect');
-    const submitImageBtn = document.getElementById('submitImageBtn');
-    const addMoreImagesBtn = document.getElementById('addMoreImagesBtn');
-    const previewArea = document.getElementById('previewArea');
-    const previewGrid = document.getElementById('previewGrid');
-    
-    const familiesToggle = document.getElementById('familiesToggle');
-    const familiesCollapsible = document.getElementById('familiesCollapsible');
-    const toggleArrow = document.getElementById('toggleArrow');
-    const familiesListDiv = document.getElementById('familiesList');
-    const imagesListDiv = document.getElementById('imagesList');
-    const addFamilyBtn = document.getElementById('addFamilyBtn');
-    const editModal = document.getElementById('editModal');
-    const editSeqNum = document.getElementById('editSeqNum');
-    const editFamily = document.getElementById('editFamily');
-    const saveEditBtn = document.getElementById('saveEditBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const viewModal = document.getElementById('viewModal');
-    const viewImage = document.getElementById('viewImage');
-    const toast = document.getElementById('toast');
-    const editCameraBtn = document.getElementById('editCameraBtn');
-    const editGalleryBtn = document.getElementById('editGalleryBtn');
-    const editCameraInput = document.getElementById('editCameraInput');
-    const editGalleryInput = document.getElementById('editGalleryInput');
-    const editImagesGrid = document.getElementById('editImagesGrid');
-    const editPreviewArea = document.getElementById('editPreviewArea');
-    const editPreviewGrid = document.getElementById('editPreviewGrid');
-    const searchInput = document.getElementById('searchInput');
-    const prevImageBtn = document.getElementById('prevImageBtn');
-    const nextImageBtn = document.getElementById('nextImageBtn');
-    const closeViewerBtn = document.getElementById('closeViewerBtn');
-    const imageCounter = document.getElementById('imageCounter');
-
-    function showToast(msg, isError=false) {
-        toast.innerText = msg;
-        toast.style.display = 'block';
-        toast.style.background = isError ? '#e41e3f' : '#1b74e4';
-        setTimeout(() => toast.style.display = 'none', 2500);
-    }
-
-    function addImageToPending(file) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            pendingImages.push({ file, previewUrl: event.target.result });
-            updatePreviewArea();
-        };
-        reader.readAsDataURL(file);
-    }
-    
-    cameraBtn.addEventListener('click', () => {
-        cameraInput.value = '';
-        cameraInput.click();
-    });
-    galleryBtn.addEventListener('click', () => {
-        galleryInput.value = '';
-        galleryInput.click();
-    });
-    
-    cameraInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) addImageToPending(e.target.files[0]);
-    });
-    galleryInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) addImageToPending(e.target.files[0]);
-    });
-    
-    function updatePreviewArea() {
-        if (pendingImages.length === 0) {
-            previewArea.style.display = 'none';
-            return;
-        }
-        previewArea.style.display = 'block';
-        let html = '';
-        pendingImages.forEach((img, index) => {
-            html += `
-                <div class="preview-item">
-                    <img src="${img.previewUrl}" alt="معاينة">
-                    <button class="preview-remove" data-index="${index}"><i class="fas fa-times"></i></button>
-                </div>
-            `;
-        });
-        previewGrid.innerHTML = html;
-        
-        document.querySelectorAll('.preview-remove').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                pendingImages.splice(idx, 1);
-                updatePreviewArea();
-            });
-        });
-    }
-    
-    addMoreImagesBtn.addEventListener('click', () => {
-        galleryInput.click();
-    });
-    
-    async function uploadToImgbb(file) {
-        const fd = new FormData();
-        fd.append("key", IMGBB_API_KEY);
-        fd.append("image", file);
-        const res = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (data.success) return data.data.url;
-        throw new Error(data.error?.message);
-    }
-    
-    submitImageBtn.addEventListener('click', async () => {
-        const seqNum = seqNumInput.value.trim();
-        const selectedFamily = familySelect.value;
-        
-        if (pendingImages.length === 0) { showToast("❌ أضف صورة أولاً", true); return; }
-        if (!seqNum) { showToast("❌ أدخل رقم تسلسلي", true); return; }
-        if (!selectedFamily) { showToast("❌ اختر عائلة", true); return; }
-        
-        try {
-            showToast(`⏳ جاري رفع ${pendingImages.length} صور...`);
-            
-            const uploadedUrls = [];
-            for (let i = 0; i < pendingImages.length; i++) {
-                const url = await uploadToImgbb(pendingImages[i].file);
-                uploadedUrls.push(url);
-            }
-            
-            const groupId = Date.now().toString();
-            for (let i = 0; i < uploadedUrls.length; i++) {
-                await db.ref(`images/${groupId}_img_${i}`).set({
-                    url: uploadedUrls[i],
-                    seqNum: seqNum,
-                    family: selectedFamily,
-                    groupId: groupId,
-                    timestamp: Date.now() + i
-                });
-            }
-            
-            pendingImages = [];
-            updatePreviewArea();
-            seqNumInput.value = '';
-            familySelect.value = '';
-            showToast("✅ تم حفظ جميع الصور");
-        } catch(err) { 
-            showToast("❌ خطأ: "+err.message, true); 
-        }
-    });
-
-    function loadFamilies() {
-        db.ref('families').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            familiesList = Object.keys(data);
-            updateFamilySelects();
-            renderFamiliesUI();
-            renderFilterButtons();
-        });
-    }
-    
-    function updateFamilySelects() {
-        let options = '<option value="" disabled selected>-- اختر عائلة --</option>';
-        familiesList.forEach(f => options += `<option value="${f}">${f}</option>`);
-        familySelect.innerHTML = options;
-        editFamily.innerHTML = options;
-    }
-    
-    function renderFilterButtons() {
-        let html = `<button class="filter-btn ${currentFilter === 'الكل' ? 'active' : ''}" data-family="الكل">🌟 الكل</button>`;
-        familiesList.forEach(family => {
-            html += `<button class="filter-btn ${currentFilter === family ? 'active' : ''}" data-family="${family}">👪 ${family}</button>`;
-        });
-        filterBar.innerHTML = html;
-        
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentFilter = btn.getAttribute('data-family');
-                renderFilterButtons();
-                displayImages();
-            });
-        });
-    }
-    
-    function renderFamiliesUI() {
-        if (familiesList.length === 0) {
-            familiesListDiv.innerHTML = '<div class="empty-msg">➕ أضف أول عائلة</div>';
-            return;
-        }
-        let html = '';
-        for (let name of familiesList) {
-            html += `
-                <div class="family-item">
-                    <span>${escapeHtml(name)}</span>
-                    <button class="btn-icon edit-family" data-name="${name}" title="تعديل"><i class="fas fa-pen" style="font-size:0.75rem"></i></button>
-                    <button class="btn-icon delete-family" data-name="${name}" title="حذف"><i class="fas fa-trash-alt" style="font-size:0.75rem"></i></button>
-                </div>
-            `;
-        }
-        familiesListDiv.innerHTML = html;
-        
-        document.querySelectorAll('.edit-family').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const oldName = btn.getAttribute('data-name');
-                const newName = prompt("الاسم الجديد:", oldName);
-                if (newName && newName.trim() && newName !== oldName) renameFamily(oldName, newName.trim());
-            });
-        });
-        document.querySelectorAll('.delete-family').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const familyName = btn.getAttribute('data-name');
-                if (confirm(`⚠️ حذف العائلة "${familyName}" وجميع منتجاتها؟`)) deleteFamilyAndImages(familyName);
-            });
-        });
-    }
-    
-    async function renameFamily(oldName, newName) {
-        if (familiesList.includes(newName)) { showToast("الاسم موجود!", true); return; }
-        await db.ref(`families/${oldName}`).remove();
-        await db.ref(`families/${newName}`).set(true);
-        const snap = await db.ref('images').once('value');
-        const updates = {};
-        snap.forEach(child => { if (child.val().family === oldName) updates[`${child.key}/family`] = newName; });
-        await db.ref('images').update(updates);
-        showToast(`✅ تم التغيير إلى "${newName}"`);
-    }
-    
-    async function deleteFamilyAndImages(familyName) {
-        const snap = await db.ref('images').once('value');
-        const promises = [];
-        snap.forEach(child => { if (child.val().family === familyName) promises.push(db.ref(`images/${child.key}`).remove()); });
-        await Promise.all(promises);
-        await db.ref(`families/${familyName}`).remove();
-        showToast(`🗑️ تم حذف العائلة`);
-    }
-    
-    addFamilyBtn.addEventListener('click', () => {
-        const newName = prompt("اسم العائلة الجديدة:");
-        if (newName && newName.trim()) {
-            const name = newName.trim();
-            if (familiesList.includes(name)) { showToast("موجودة مسبقاً", true); return; }
-            db.ref(`families/${name}`).set(true).then(() => showToast(`✅ تمت إضافة "${name}"`));
-        }
-    });
+    const filterBar = document.getElementById('filterBar');
+    const imagesGrid = document.getElementById('imagesGrid');
+    const paginationDiv = document.getElementById('pagination');
+    const galleryModal = document.getElementById('galleryModal');
+    const galleryImage = document.getElementById('galleryImage');
+    const galleryDots = document.getElementById('galleryDots');
 
     function groupImages(images) {
         const groups = new Map();
@@ -996,368 +431,286 @@
                     seqNum: img.seqNum,
                     family: img.family,
                     images: [],
-                    groupId: img.groupId || img.id
+                    groupId: img.groupId || img.id,
+                    mainImage: img.url,
+                    imageCount: 0
                 });
             }
-            groups.get(key).images.push(img);
+            groups.get(key).images.push({ url: img.url, timestamp: img.timestamp });
+            groups.get(key).imageCount = groups.get(key).images.length;
         });
+        
+        for (let group of groups.values()) {
+            group.images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+            group.mainImage = group.images[0]?.url || '';
+        }
+        
         return Array.from(groups.values());
+    }
+
+    function openGallery(imagesArray, startIndex = 0) {
+        if (!imagesArray || imagesArray.length === 0) return;
+        currentGalleryImages = imagesArray;
+        currentGalleryIndex = startIndex;
+        updateGalleryImage();
+        updateGalleryDots();
+        galleryModal.style.display = 'flex';
+    }
+
+    function updateGalleryImage() {
+        if (currentGalleryImages.length > 0 && currentGalleryIndex >= 0 && currentGalleryIndex < currentGalleryImages.length) {
+            galleryImage.src = currentGalleryImages[currentGalleryIndex].url;
+        }
+    }
+
+    function updateGalleryDots() {
+        let dotsHtml = '';
+        for (let i = 0; i < currentGalleryImages.length; i++) {
+            dotsHtml += `<div class="gallery-dot ${i === currentGalleryIndex ? 'active' : ''}" onclick="event.stopPropagation(); goToImage(${i})"></div>`;
+        }
+        galleryDots.innerHTML = dotsHtml;
+    }
+
+    window.nextImage = function() {
+        if (currentGalleryIndex < currentGalleryImages.length - 1) {
+            currentGalleryIndex++;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.prevImage = function() {
+        if (currentGalleryIndex > 0) {
+            currentGalleryIndex--;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.goToImage = function(index) {
+        if (index >= 0 && index < currentGalleryImages.length) {
+            currentGalleryIndex = index;
+            updateGalleryImage();
+            updateGalleryDots();
+        }
+    }
+
+    window.closeGallery = function() {
+        galleryModal.style.display = 'none';
+    }
+
+    // ========== السحب باللمس على النافذة بأكملها (يعمل 100%) ==========
+    let touchStartXGlobal = 0;
+    let touchEndXGlobal = 0;
+    
+    galleryModal.addEventListener('touchstart', (e) => {
+        touchStartXGlobal = e.touches[0].clientX;
+    });
+    
+    galleryModal.addEventListener('touchend', (e) => {
+        touchEndXGlobal = e.changedTouches[0].clientX;
+        const swipeDistance = touchEndXGlobal - touchStartXGlobal;
+        const threshold = 50;
+        
+        if (Math.abs(swipeDistance) > threshold) {
+            if (swipeDistance > 0) {
+                // سحب لليمين ← الصورة السابقة
+                prevImage();
+            } else {
+                // سحب لليسار ← الصورة التالية
+                nextImage();
+            }
+        }
+    });
+
+    function loadFamilies() {
+        db.ref('families').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            familiesList = Object.keys(data);
+            renderFilterButtons();
+        });
+    }
+
+    function renderFilterButtons() {
+        let html = `<button class="filter-btn ${currentFilter === 'الكل' ? 'active' : ''}" data-family="الكل"><i class="fas fa-star"></i> الكل</button>`;
+        familiesList.forEach(family => {
+            html += `<button class="filter-btn ${currentFilter === family ? 'active' : ''}" data-family="${family}"><i class="fas fa-users"></i> ${family}</button>`;
+        });
+        filterBar.innerHTML = html;
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFilter = btn.getAttribute('data-family');
+                currentPage = 1;
+                renderFilterButtons();
+                displayGroups();
+                renderPagination();
+            });
+        });
     }
 
     function loadImages() {
         db.ref('images').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            allImages = Object.entries(data).map(([id, img]) => ({ id, ...img }));
-            displayImages();
+            const images = snapshot.val();
+            const allImagesArray = [];
+            if (images) {
+                Object.entries(images).forEach(([id, data]) => {
+                    allImagesArray.push({
+                        id: id,
+                        url: data.url,
+                        seqNum: data.seqNum,
+                        family: data.family,
+                        timestamp: data.timestamp || 0
+                    });
+                });
+            }
+            allGroups = groupImages(allImagesArray);
+            allGroups.sort((a, b) => {
+                const numA = parseInt(a.seqNum);
+                const numB = parseInt(b.seqNum);
+                if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                return String(a.seqNum).localeCompare(String(b.seqNum));
+            });
+            displayGroups();
+            renderPagination();
         });
     }
-    
-    function displayImages() {
-        let filtered = allImages;
+
+    function getFilteredGroups() {
+        if (currentFilter === "الكل") return allGroups;
+        return allGroups.filter(group => group.family === currentFilter);
+    }
+
+    function displayGroups() {
+        const filtered = getFilteredGroups();
+        const totalItems = filtered.length;
         
-        if (currentFilter !== "الكل") {
-            filtered = filtered.filter(img => img.family === currentFilter);
-        }
-        
-        if (currentSearchTerm) {
-            const term = currentSearchTerm.toLowerCase();
-            filtered = filtered.filter(img => 
-                img.seqNum?.toLowerCase().includes(term) || 
-                img.family?.toLowerCase().includes(term)
-            );
-        }
-        
-        const groups = groupImages(filtered);
-        
-        if (groups.length === 0) {
-            imagesListDiv.innerHTML = '<div class="empty-msg">📭 لا توجد منتجات</div>';
+        if (totalItems === 0) {
+            imagesGrid.innerHTML = '<div class="empty-msg"><i class="fas fa-folder-open"></i> لا توجد منتجات في هذه العائلة</div>';
             return;
         }
-        
+
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+        const pageGroups = filtered.slice(startIndex, endIndex);
+
         let html = '';
-        for (let group of groups) {
-            const mainImage = group.images[0]?.url || '';
-            const imageCount = group.images.length;
+        for (let group of pageGroups) {
             html += `
-                <div class="image-card">
-                    <img src="${mainImage}" class="view-img" data-seq="${escapeHtml(group.seqNum)}" data-family="${escapeHtml(group.family)}">
+                <div class="image-card" data-seq="${escapeHtml(group.seqNum)}" data-family="${escapeHtml(group.family)}">
+                    <img src="${group.mainImage}" alt="صورة" loading="lazy">
                     <div class="image-info">
                         <div>
-                            <span class="seq-badge" title="${escapeHtml(group.seqNum)}">🔢 ${escapeHtml(group.seqNum)}</span>
-                            <div class="photos-count">📸 ${imageCount} صورة</div>
+                            <span class="seq-badge"><i class="fas fa-hashtag"></i> ${escapeHtml(group.seqNum)}</span>
+                            <div class="photos-count"><i class="fas fa-images"></i> ${group.imageCount} صورة</div>
                         </div>
-                        <div class="image-actions">
-                            <button class="btn-icon edit-product" data-seq="${escapeHtml(group.seqNum)}" data-family="${group.family}" data-group-id="${group.groupId}"><i class="fas fa-pen" style="font-size:0.7rem"></i></button>
-                            <button class="btn-icon delete-product" data-seq="${escapeHtml(group.seqNum)}" data-family="${group.family}"><i class="fas fa-trash-alt" style="font-size:0.7rem"></i></button>
-                        </div>
+                        <span class="family-badge"><i class="fas fa-users"></i> ${escapeHtml(group.family)}</span>
                     </div>
                 </div>
             `;
         }
-        imagesListDiv.innerHTML = html;
-        
-        document.querySelectorAll('.view-img').forEach(el => {
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const seqNum = el.dataset.seq;
-                const family = el.dataset.family;
-                openImageViewer(seqNum, family);
-            });
-        });
-        
-        document.querySelectorAll('.edit-product').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const seqNum = btn.dataset.seq;
-                const family = btn.dataset.family;
-                openEditModal(seqNum, family);
-            });
-        });
-        
-        document.querySelectorAll('.delete-product').forEach(btn => {
-            btn.addEventListener('click', async () => { 
-                const seqNum = btn.dataset.seq;
-                const family = btn.dataset.family;
-                if(confirm(`🗑️ حذف جميع صور المنتج "${seqNum}"؟`)) {
-                    const snap = await db.ref('images').once('value');
-                    const promises = [];
-                    snap.forEach(child => {
-                        if (child.val().seqNum === seqNum && child.val().family === family) {
-                            promises.push(db.ref(`images/${child.key}`).remove());
-                        }
-                    });
-                    await Promise.all(promises);
-                    showToast("تم الحذف");
+        imagesGrid.innerHTML = html;
+
+        document.querySelectorAll('.image-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const seqNum = card.getAttribute('data-seq');
+                const family = card.getAttribute('data-family');
+                const group = allGroups.find(g => g.seqNum === seqNum && g.family === family);
+                if (group && group.images.length > 0) {
+                    openGallery(group.images);
                 }
             });
         });
     }
-    
-    async function openImageViewer(seqNum, family) {
-        const snapshot = await db.ref('images').once('value');
-        const images = [];
-        snapshot.forEach(child => {
-            const img = child.val();
-            if (img.seqNum === seqNum && img.family === family) {
-                images.push({ id: child.key, url: img.url, timestamp: img.timestamp });
-            }
-        });
-        
-        images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
-        currentViewerImages = images;
-        currentViewerIndex = 0;
-        
-        if (images.length > 0) {
-            updateViewerImage();
-            viewModal.style.display = 'flex';
-        }
-    }
-    
-    function updateViewerImage() {
-        if (currentViewerImages.length > 0 && currentViewerIndex >= 0 && currentViewerIndex < currentViewerImages.length) {
-            viewImage.src = currentViewerImages[currentViewerIndex].url;
-            imageCounter.textContent = `${currentViewerIndex + 1} / ${currentViewerImages.length}`;
-        }
-    }
-    
-    function nextImage() {
-        if (currentViewerImages.length > 0 && currentViewerIndex < currentViewerImages.length - 1) {
-            currentViewerIndex++;
-            updateViewerImage();
-        } else if (currentViewerIndex === currentViewerImages.length - 1) {
-            showToast("📸 هذه آخر صورة", false);
-        }
-    }
-    
-    function prevImage() {
-        if (currentViewerIndex > 0) {
-            currentViewerIndex--;
-            updateViewerImage();
+
+    function generatePageNumbers(totalPages) {
+        if (totalPages <= 1) return [1];
+        let pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
         } else {
-            showToast("📸 هذه أول صورة", false);
+            pages.push(1, 2, 3);
+            if (currentPage > 4 && currentPage < totalPages - 3) {
+                pages.push('...');
+                pages.push(currentPage - 1, currentPage, currentPage + 1);
+                pages.push('...');
+                pages.push(totalPages - 2, totalPages - 1, totalPages);
+            } else if (currentPage <= 4) {
+                pages.push(4, 5, '...');
+                pages.push(totalPages - 2, totalPages - 1, totalPages);
+            } else if (currentPage >= totalPages - 3) {
+                pages.push('...');
+                for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+            }
+            const cleaned = [];
+            let lastWasDot = false;
+            for (let p of pages) {
+                if (p === '...') {
+                    if (!lastWasDot) cleaned.push(p);
+                    lastWasDot = true;
+                } else {
+                    cleaned.push(p);
+                    lastWasDot = false;
+                }
+            }
+            pages = cleaned;
         }
+        return pages;
     }
 
-    // ===================== أحداث نافذة العرض =====================
-    viewModal.addEventListener('click', (e) => {
-        if (e.target === viewModal) {
-            viewModal.style.display = 'none';
-        }
-    });
-    
-    nextImageBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        nextImage();
-    });
-    
-    prevImageBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        prevImage();
-    });
-    
-    closeViewerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        viewModal.style.display = 'none';
-    });
-    
-    viewImage.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-    
-    viewImage.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    viewImage.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-    
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        if (touchEndX < touchStartX - swipeThreshold) {
-            nextImage();
-        }
-        if (touchEndX > touchStartX + swipeThreshold) {
-            prevImage();
-        }
-    }
-    // ============================================================
-    
-    async function openEditModal(seqNum, family) {
-        currentEditSeqNum = seqNum;
-        currentEditFamily = family;
-        currentEditNewImages = [];
+    function renderPagination() {
+        const filtered = getFilteredGroups();
+        const totalItems = filtered.length;
+        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
         
-        editSeqNum.value = seqNum;
-        editFamily.value = family;
-        
-        const snapshot = await db.ref('images').once('value');
-        const images = [];
-        snapshot.forEach(child => {
-            const img = child.val();
-            if (img.seqNum === seqNum && img.family === family) {
-                images.push({ id: child.key, ...img });
-            }
-        });
-        
-        currentEditExistingImages = images.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
-        
-        renderEditImages();
-        editPreviewArea.style.display = 'none';
-        editModal.style.display = 'flex';
-    }
-    
-    function renderEditImages() {
-        if (currentEditExistingImages.length === 0) {
-            editImagesGrid.innerHTML = '<div class="empty-msg">📭 لا توجد صور</div>';
+        if (totalPages <= 1) {
+            paginationDiv.innerHTML = '';
             return;
         }
         
-        let html = '';
-        currentEditExistingImages.forEach((img, idx) => {
-            html += `
-                <div class="edit-image-item">
-                    <img src="${img.url}" class="view-edit-img" data-url="${img.url}">
-                    <button class="edit-image-delete" data-id="${img.id}" data-idx="${idx}"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `;
-        });
-        editImagesGrid.innerHTML = html;
+        const pages = generatePageNumbers(totalPages);
+        const prevDisabled = currentPage === 1;
+        const nextDisabled = currentPage === totalPages;
         
-        document.querySelectorAll('.view-edit-img').forEach(el => {
-            el.addEventListener('click', () => {
-                const seqNum = editSeqNum.value;
-                const family = editFamily.value;
-                viewModal.style.display = 'none';
-                openImageViewer(seqNum, family);
-            });
-        });
+        let html = `<button class="page-btn ${prevDisabled ? 'disabled' : ''}" data-page="prev" ${prevDisabled ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
         
-        document.querySelectorAll('.edit-image-delete').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const imgId = btn.dataset.id;
-                if (confirm("حذف هذه الصورة؟")) {
-                    await db.ref(`images/${imgId}`).remove();
-                    showToast("✅ تم حذف الصورة");
-                    openEditModal(currentEditSeqNum, currentEditFamily);
+        for (let p of pages) {
+            if (p === '...') {
+                html += `<span class="page-dots"><i class="fas fa-ellipsis-h"></i></span>`;
+            } else {
+                html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
+            }
+        }
+        
+        html += `<button class="page-btn ${nextDisabled ? 'disabled' : ''}" data-page="next" ${nextDisabled ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+        
+        paginationDiv.innerHTML = html;
+        
+        document.querySelectorAll('#pagination .page-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('disabled')) return;
+                const action = btn.getAttribute('data-page');
+                let newPage = currentPage;
+                if (action === 'prev' && currentPage > 1) newPage = currentPage - 1;
+                else if (action === 'next' && currentPage < totalPages) newPage = currentPage + 1;
+                else if (!isNaN(parseInt(action))) newPage = parseInt(action);
+                if (newPage !== currentPage) {
+                    currentPage = newPage;
+                    displayGroups();
+                    renderPagination();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
         });
     }
-    
-    function addEditImageToPending(file) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            currentEditNewImages.push({ file, previewUrl: event.target.result });
-            updateEditPreviewArea();
-        };
-        reader.readAsDataURL(file);
-    }
-    
-    function updateEditPreviewArea() {
-        if (currentEditNewImages.length === 0) {
-            editPreviewArea.style.display = 'none';
-            return;
-        }
-        editPreviewArea.style.display = 'block';
-        let html = '';
-        currentEditNewImages.forEach((img, index) => {
-            html += `
-                <div class="preview-item">
-                    <img src="${img.previewUrl}" alt="معاينة">
-                    <button class="preview-remove" data-index="${index}"><i class="fas fa-times"></i></button>
-                </div>
-            `;
-        });
-        editPreviewGrid.innerHTML = html;
-        
-        document.querySelectorAll('#editPreviewGrid .preview-remove').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                currentEditNewImages.splice(idx, 1);
-                updateEditPreviewArea();
-            });
-        });
-    }
-    
-    editCameraBtn.addEventListener('click', () => {
-        editCameraInput.value = '';
-        editCameraInput.click();
-    });
-    editGalleryBtn.addEventListener('click', () => {
-        editGalleryInput.value = '';
-        editGalleryInput.click();
-    });
-    
-    editCameraInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) addEditImageToPending(e.target.files[0]);
-    });
-    editGalleryInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) addEditImageToPending(e.target.files[0]);
-    });
-    
-    saveEditBtn.addEventListener('click', async () => {
-        if (!currentEditSeqNum) return;
-        const newSeq = editSeqNum.value.trim();
-        const newFamily = editFamily.value;
-        if (!newSeq || !newFamily) { showToast("❌ املأ الحقول", true); return; }
-        
-        try {
-            for (let img of currentEditExistingImages) {
-                await db.ref(`images/${img.id}`).update({
-                    seqNum: newSeq,
-                    family: newFamily
-                });
-            }
-            
-            if (currentEditNewImages.length > 0) {
-                showToast(`⏳ جاري رفع ${currentEditNewImages.length} صور جديدة...`);
-                const groupId = Date.now().toString();
-                for (let i = 0; i < currentEditNewImages.length; i++) {
-                    const url = await uploadToImgbb(currentEditNewImages[i].file);
-                    await db.ref(`images/${groupId}_img_${i}`).set({
-                        url: url,
-                        seqNum: newSeq,
-                        family: newFamily,
-                        groupId: groupId,
-                        timestamp: Date.now() + i
-                    });
-                }
-            }
-            
-            showToast("✅ تم حفظ التغييرات");
-            editModal.style.display = 'none';
-            currentEditNewImages = [];
-        } catch(err) { 
-            showToast("❌ خطأ: "+err.message, true); 
-        }
-    });
-    
-    closeModalBtn.addEventListener('click', () => { 
-        editModal.style.display='none'; 
-        currentEditNewImages = [];
-    });
-    
-    function escapeHtml(str) { 
-        return String(str || '').replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); 
-    }
 
-    searchInput.addEventListener('input', (e) => {
-        currentSearchTerm = e.target.value;
-        displayImages();
-    });
-
-    familiesToggle.addEventListener('click', () => {
-        familiesCollapsible.classList.toggle('show');
-        toggleArrow.classList.toggle('rotated');
-    });
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
 
     loadFamilies();
     loadImages();
-    
-    showToast("✅ النظام جاهز");
 </script>
 </body>
 </html>
